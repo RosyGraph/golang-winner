@@ -31,13 +31,14 @@ func TestWallet(t *testing.T) {
 }
 
 func TestBitcoin(t *testing.T) {
-	bitcoins := Bitcoin(10)
-	got := fmt.Sprint(bitcoins)
-	want := "10 BTC"
+	t.Run("string representation", func(t *testing.T) {
+		got := fmt.Sprint(Bitcoin(10))
+		want := "10 BTC"
 
-	if got != want {
-		t.Errorf("got %s want %s", got, want)
-	}
+		if got != want {
+			t.Errorf("got %s want %s", got, want)
+		}
+	})
 }
 
 func assertBalance(t *testing.T, wallet Wallet, want Bitcoin) {
