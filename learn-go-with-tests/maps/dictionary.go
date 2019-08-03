@@ -13,6 +13,10 @@ func (e DictionaryErr) Error() string {
 	return string(e)
 }
 
+func (d Dictionary) Update(word, definition string) {
+	d[word] = definition
+}
+
 func (d Dictionary) Search(word string) (string, error) {
 	definition, ok := d[word]
 	if !ok {
