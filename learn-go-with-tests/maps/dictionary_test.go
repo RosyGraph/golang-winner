@@ -2,10 +2,10 @@ package main
 
 import "testing"
 
-func TestHelloWorld(t *testing.T) {
-	dictionary := map[string]string{"test": "this is just a test"}
+func TestSearch(t *testing.T) {
+	dictionary := Dictionary{"test": "this is just a test"}
 
-	got := Search(dictionary, "test")
+	got := dictionary.Search("test")
 	want := "this is just a test"
 
 	assertStrings(t, got, want)
@@ -15,6 +15,6 @@ func assertStrings(t *testing.T, got, want string) {
 	t.Helper()
 
 	if got != want {
-		t.Errorf("got %q want %q given %q", got, want, "test")
+		t.Errorf("got %q want %q", got, want)
 	}
 }
