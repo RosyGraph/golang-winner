@@ -7,12 +7,9 @@ func Sum(numbers []int) (sum int) {
 	return
 }
 
-func SumAll(numberSlices ...[]int) []int {
-	lengthOfSlices := len(numberSlices)
-	sums := make([]int, lengthOfSlices)
-
-	for i, numberSlice := range numberSlices {
-		sums[i] = Sum(numberSlice)
+func SumAll(numberSlices ...[]int) (sums []int) {
+	for _, numberSlice := range numberSlices {
+		sums = append(sums, Sum(numberSlice))
 	}
 
 	return sums
