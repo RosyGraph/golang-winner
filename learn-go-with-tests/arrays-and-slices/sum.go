@@ -12,5 +12,18 @@ func SumAll(numberSlices ...[]int) (sums []int) {
 		sums = append(sums, Sum(numberSlice))
 	}
 
-	return sums
+	return
+}
+
+func SumAllTails(numberSlices ...[]int) (sumOfTails []int) {
+	for _, numberSlice := range numberSlices {
+		if len(numberSlice) < 1 {
+			sumOfTails = append(sumOfTails, 0)
+		} else {
+			tail := numberSlice[1:]
+			sumOfTails = append(sumOfTails, Sum(tail))
+		}
+	}
+
+	return
 }
