@@ -1,10 +1,11 @@
 package main
 
 import (
+	"fmt"
 	"testing"
 )
 
-func TestHelloWorld(t *testing.T) {
+func TestWallet(t *testing.T) {
 	t.Run("deposit", func(t *testing.T) {
 		wallet := Wallet{}
 		wallet.Deposit(Bitcoin(10))
@@ -27,6 +28,16 @@ func TestHelloWorld(t *testing.T) {
 		assertBalance(t, wallet, startingBalance)
 		assertError(t, err, ErrInsufficientFunds)
 	})
+}
+
+func TestBitcoin(t *testing.T) {
+	bitcoins := Bitcoin(10)
+	got := fmt.Sprint(bitcoins)
+	want := "10 BTC"
+
+	if got != want {
+		t.Errorf("got %s want %s", got, want)
+	}
 }
 
 func assertBalance(t *testing.T, wallet Wallet, want Bitcoin) {
