@@ -1,20 +1,19 @@
 package main
 
 import (
-	"bytes"
 	"fmt"
+	"io"
 	"os"
 )
 
 type Grid [3][3]string
 
-func (g Grid) PrintState(b *bytes.Buffer) {
-	buffer := 
+func (g Grid) PrintState(writer io.Writer) {
 	for _, row := range g {
 		for _, v := range row {
-			fmt.Fprintf(b, "%q ", v)
+			fmt.Fprintf(writer, "%v ", v)
 		}
-		fmt.Fprintln(b)
+		fmt.Fprintln(writer)
 	}
 }
 

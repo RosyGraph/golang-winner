@@ -5,8 +5,9 @@ import (
 	"testing"
 )
 
-func TestGrid(t *testing.T) {
+func TestPrintState(t *testing.T) {
 	buffer := bytes.Buffer{}
+
 	grid := Grid{
 		{"X", "O", "X"},
 		{" ", " ", " "},
@@ -14,8 +15,8 @@ func TestGrid(t *testing.T) {
 	}
 	grid.PrintState(&buffer)
 
-	want := "X O X\n      \n      "
 	got := buffer.String()
+	want := "X O X \n      \n      \n"
 
 	if want != got {
 		t.Errorf("got %q want %q", got, want)
