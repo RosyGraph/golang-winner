@@ -29,10 +29,7 @@ func TestPrintState(t *testing.T) {
 
 	for _, tt := range stateTests {
 		t.Run(tt.name, func(t *testing.T) {
-			buffer := bytes.Buffer{}
-			tt.grid.PrintState(&buffer)
-			got := buffer.String()
-			assertString(t, got, tt.want)
+			assertWriterOutput(t, tt.grid, tt.want)
 		})
 	}
 }
@@ -41,19 +38,20 @@ func TestFromString(t *testing.T) {
 	cells := "\"O OXXO XX\""
 	grid := Grid{}
 	grid.FromString(cells)
-	buffer := bytes.Buffer{}
-	grid.PrintState(&buffer)
-	got := buffer.String()
 	want := "---------\n" +
 		"| O   O |\n" +
 		"| X X O |\n" +
 		"|   X X |\n" +
 		"---------\n"
-	assertString(t, got, want)
+	assertWriterOutput(t, grid, want)
 }
 
-func assertString(t *testing.T, got, want string) {
+func assertWriterOutput(t *testing.T, grid Grid, want string) {
 	t.Helper()
+
+	buffer := bytes.Buffer{}
+	grid.PrintState(&buffer)
+	got := buffer.String()
 
 	if want != got {
 		t.Errorf("got %q want %q", got, want)
