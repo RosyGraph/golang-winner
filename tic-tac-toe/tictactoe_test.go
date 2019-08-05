@@ -1,14 +1,23 @@
-package tictactoe
+package main
 
-import "testing"
+import (
+	"bytes"
+	"testing"
+)
 
 func TestGrid(t *testing.T) {
-	// grid := Grid {
-	// string[3]{"X", "O", "X"},
-	// string[3]{" ", " ", " "},
-	// string[3]{" ", " ", " "},
-	// }
+	buffer := bytes.Buffer{}
+	grid := Grid{
+		{"X", "O", "X"},
+		{" ", " ", " "},
+		{" ", " ", " "},
+	}
+	grid.PrintState(&buffer)
 
-	want := nil
-	got := nil
+	want := "X O X\n      \n      "
+	got := buffer.String()
+
+	if want != got {
+		t.Errorf("got %q want %q", got, want)
+	}
 }

@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-func TestHelloWorld(t *testing.T) {
+func TestGreet(t *testing.T) {
 	buffer := bytes.Buffer{}
 	Greet(&buffer, "Chris")
 
