@@ -3,25 +3,22 @@ package main
 import (
 	"fmt"
 	"io"
-	"os"
+	"strings"
 )
 
 type Grid [3][3]string
 
 func (g Grid) PrintState(writer io.Writer) {
+	fmt.Fprintln(writer, "---------")
 	for _, row := range g {
-		for _, v := range row {
-			fmt.Fprintf(writer, "%v ", v)
-		}
-		fmt.Fprintln(writer)
+		fmt.Fprintf(writer, "| %s %s %s |\n", row[0], row[1], row[2])
 	}
+	fmt.Fprintln(writer, "---------")
 }
 
-func main() {
-	grid := Grid{
-		{"X", "O", "X"},
-		{" ", " ", " "},
-		{" ", " ", " "},
+func (g *Grid) FromString(cells string) {
+	cells = strings.Trim(cells, "\"")
+	for i, char := range cells {
+		g[i/3][i%3] = string(char)
 	}
-	grid.PrintState(os.Stdout)
 }
