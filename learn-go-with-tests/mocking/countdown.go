@@ -11,6 +11,15 @@ const countdownStart = 3
 
 type DefaultSleeper struct{}
 
+type ConfigurableSleeper struct {
+	duration time.Duration
+	sleep    func(time.Duration)
+}
+
+func (c ConfigurableSleeper) Sleep() {
+	c.sleep(c.duration)
+}
+
 func (d *DefaultSleeper) Sleep() {
 	time.Sleep(1 * time.Second)
 }
