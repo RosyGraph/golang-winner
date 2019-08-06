@@ -22,69 +22,25 @@ type State struct {
 	oWins          bool
 }
 
-type Grid [3][3]string
-
-func (g Grid) Print(writer io.Writer) {
-	fmt.Fprintln(writer, "---------")
-	for _, row := range g {
-		fmt.Fprintf(writer, "| %s %s %s |\n", row[0], row[1], row[2])
-	}
-	fmt.Fprintln(writer, "---------")
+type XOCounts struct {
+	xInRow int
+	oInRow int
+	xInCol int
+	oInCol int
 }
 
-func (grid Grid) GameState() string {
+type Grid [3][3]string
+
+func (g Grid) GameState() string {
 	s := State{}
 	for row := 0; row < 3; row++ {
-		xInRow := 0
-		oInRow := 0
-		xInCol := 0
-		oInCol := 0
+		counts := XOCounts{}
 
-		grid.checkDiagonals(row, &s)
+		g.checkDiagonals(row, &s)
 
 		for col := 0; col < 3; col++ {
-			switch grid[row][col] {
-			case X:
-				xInRow++
-				if xInRow > 2 {
-					if s.oWins {
-						return "Impossible"
-					} else {
-						s.xWins = true
-					}
-				}
-			case O:
-				oInRow++
-				if oInRow > 2 {
-					if s.xWins {
-						return "Impossible"
-					} else {
-						s.oWins = true
-					}
-				}
-			}
-
-			switch grid[col][row] {
-			case X:
-				xInCol++
-				s.xCount++
-				if xInCol > 2 {
-					if s.oWins {
-						return "Impossible"
-					} else {
-						s.xWins = true
-					}
-				}
-			case O:
-				oInCol++
-				s.oCount++
-				if oInCol > 2 {
-					if s.xWins {
-						return "Impossible"
-					} else {
-						s.oWins = true
-					}
-				}
+			if !g.checkRows(&s, &counts, row, col) || !g.checkCols(&s, &counts, row, col) {
+				return "Impossible"
 			}
 		}
 	}
@@ -92,7 +48,9 @@ func (grid Grid) GameState() string {
 	if abs(s.xCount-s.oCount) > 2 {
 		return "Impossible"
 	}
+
 	s.total += s.xCount + s.oCount
+
 	if s.xWins {
 		return "X wins"
 	} else if s.oWins {
@@ -102,6 +60,14 @@ func (grid Grid) GameState() string {
 	} else {
 		return "Draw"
 	}
+}
+
+func (g Grid) Print(writer io.Writer) {
+	fmt.Fprintln(writer, "---------")
+	for _, row := range g {
+		fmt.Fprintf(writer, "| %s %s %s |\n", row[0], row[1], row[2])
+	}
+	fmt.Fprintln(writer, "---------")
 }
 
 func (g *Grid) FromString(cells string) {
@@ -134,9 +100,67 @@ func (grid Grid) checkDiagonals(row int, s *State) {
 	}
 }
 
+func (g Grid) checkRow(s *State, inRow *int, oppWins bool, wins *bool) bool {
+	*inRow++
+	if *inRow > 2 {
+		if oppWins {
+			return false
+		} else {
+			*wins = true
+		}
+	}
+	return true
+}
+
+func (g Grid) checkRows(s *State, counts *XOCounts, row, col int) bool {
+	switch g[row][col] {
+	case X:
+		if !g.checkRow(s, &counts.xInRow, s.oWins, &s.xWins) {
+			return false
+		}
+	case O:
+		if !g.checkRow(s, &counts.oInRow, s.xWins, &s.oWins) {
+			return false
+		}
+	}
+	return true
+}
+
+func (g Grid) checkCols(s *State, counts *XOCounts, row, col int) bool {
+	switch g[col][row] {
+	case X:
+		counts.xInCol++
+		s.xCount++
+		if counts.xInCol > 2 {
+			if s.oWins {
+				return false
+			} else {
+				s.xWins = true
+			}
+		}
+	case O:
+		counts.oInCol++
+		s.oCount++
+		if counts.oInCol > 2 {
+			if s.xWins {
+				return false
+			} else {
+				s.oWins = true
+			}
+		}
+	}
+	return true
+}
+
 func main() {
 	grid := Grid{}
+	fmt.Print("Enter a state: ")
+	var input string
+	fmt.Scanln(&input)
+	grid.FromString(input)
+	fmt.Println()
 	grid.Print(os.Stdout)
+	fmt.Printf("\n%s\n", grid.GameState())
 }
 
 func abs(x int) int {
