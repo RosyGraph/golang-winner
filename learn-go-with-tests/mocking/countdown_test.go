@@ -5,13 +5,25 @@ import (
 	"testing"
 )
 
+type Sleeper interface {
+	Sleep()
+}
+
+type SpySleeper struct {
+	Calls int
+}
+
+func (s *SpySleeper) Sleep() {
+	s.Calls++
+}
+
 func TestCountdown(t *testing.T) {
 	buffer := &bytes.Buffer{}
+	spySleeper := &SpySleeper{}
 
-	Countdown(buffer)
+	Countdown(buffer, spySleeper)
+
 	got := buffer.String()
-
-	// Print 3
 	want := `3
 2
 1
@@ -21,6 +33,7 @@ Go!`
 		t.Errorf("got %q want %q", got, want)
 	}
 
-	// Print 1, 2, 3 and Go!
-	// Wait 1 second between each line
+	if spySleeper.Calls != 4 {
+		t.Errorf("not enough calls to sleeper, want 4 got %d", spySleeper.Calls)
+	}
 }

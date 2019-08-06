@@ -46,6 +46,12 @@ func TestFromString(t *testing.T) {
 	assertWriterOutput(t, grid, want)
 }
 
+func TestHumanMove(t *testing.T) {
+	cells := "X X O    "
+	grid := Grid{}
+	grid.FromString(cells)
+}
+
 func assertWriterOutput(t *testing.T, grid Grid, want string) {
 	t.Helper()
 
