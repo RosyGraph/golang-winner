@@ -98,10 +98,10 @@ func TestHumanMove(t *testing.T) {
 	t.Run("cell is occupied", func(t *testing.T) {
 		grid := Grid{}
 		grid.FromString("\"X        \"")
-		err := grid.HumanMove("1 3", "X")
+		err := grid.HumanMove("1 3", X)
 
-		if err == nil {
-			t.Error("wanted an error but didn't get one")
+		if err != ErrCellOccupied {
+			t.Errorf("wanted %q error but didn't get one", ErrCellOccupied)
 		}
 	})
 
@@ -110,21 +110,19 @@ func TestHumanMove(t *testing.T) {
 		grid.FromString("\"         \"")
 		err := grid.HumanMove("a 1", X)
 
-		if err == nil {
-			t.Error("wanted an error but didn't get one")
+		if err != ErrInvalidInput {
+			t.Errorf("wanted %q error but didn't get one", ErrInvalidInput)
 		}
 	})
 
 	t.Run("input outside 1 to 3", func(t *testing.T) {
 		grid := Grid{}
 		grid.FromString("\"         \"")
-		grid.HumanMove("1 1", "X")
-		want := "---------\n" +
-			"|       |\n" +
-			"|       |\n" +
-			"| X     |\n" +
-			"---------\n"
-		assertWriterOutput(t, grid, want)
+		err := grid.HumanMove("4 5", X)
+
+		if err != ErrInvalidInput {
+			t.Errorf("wanted %q error but didn't get one", ErrInvalidInput)
+		}
 	})
 }
 
