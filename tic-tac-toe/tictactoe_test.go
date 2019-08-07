@@ -90,6 +90,40 @@ func TestHumanMove(t *testing.T) {
 			"---------\n"
 		assertWriterOutput(t, grid, want)
 	})
+
+	t.Run("cell is occupied", func(t *testing.T) {
+		grid := Grid{}
+		grid.FromString("\"X        \"")
+		err := grid.HumanMove("1 3", "X")
+
+		if err == nil {
+			t.Error("wanted an error but didn't get one")
+		}
+	})
+
+	t.Run("input is not 2 numbers", func(t *testing.T) {
+		grid := Grid{}
+		grid.FromString("\"         \"")
+		grid.HumanMove("1 1", "X")
+		want := "---------\n" +
+			"|       |\n" +
+			"|       |\n" +
+			"| X     |\n" +
+			"---------\n"
+		assertWriterOutput(t, grid, want)
+	})
+
+	t.Run("input outside 1 to 3", func(t *testing.T) {
+		grid := Grid{}
+		grid.FromString("\"         \"")
+		grid.HumanMove("1 1", "X")
+		want := "---------\n" +
+			"|       |\n" +
+			"|       |\n" +
+			"| X     |\n" +
+			"---------\n"
+		assertWriterOutput(t, grid, want)
+	})
 }
 
 func assertWriterOutput(t *testing.T, grid Grid, want string) {

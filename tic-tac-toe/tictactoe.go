@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"errors"
 	"fmt"
 	"io"
 	"os"
@@ -33,13 +34,17 @@ type XOCounts struct {
 
 type Grid [3][3]string
 
-func (g *Grid) HumanMove(move, team string) {
+func (g *Grid) HumanMove(move, team string) error {
 	coords := strings.Split(move, " ")
 	row, _ := strconv.Atoi(coords[1])
 	col, _ := strconv.Atoi(coords[0])
 	row = 3 - row
 	col -= 1
+	if g[row][col] == X || g[row][col] == O {
+		return errors.New("oh no")
+	}
 	g[row][col] = team
+	return nil
 }
 
 func (g Grid) GameState() string {
@@ -168,7 +173,7 @@ func (g Grid) checkCols(s *State, counts *XOCounts, row, col int) bool {
 }
 
 func main() {
-	fmt.Print("Enter board state:")
+	fmt.Print("Enter board state: ")
 	g := Grid{}
 	text := stringFromConsole(os.Stdin)
 	g.FromString(text)
