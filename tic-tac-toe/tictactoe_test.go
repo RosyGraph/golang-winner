@@ -42,9 +42,9 @@ func TestPrintState(t *testing.T) {
 		{
 			name: "not finished",
 			grid: Grid{
-				{" ", "X", "X"},
-				{"X", "O", "O"},
-				{" ", "X", "O"},
+				{" ", " ", " "},
+				{" ", " ", " "},
+				{" ", " ", " "},
 			},
 			want: "Game not finished",
 		},
@@ -78,48 +78,18 @@ func TestPrintState(t *testing.T) {
 	}
 }
 
-func TestFromString(t *testing.T) {
-	t.Run("mix", func(t *testing.T) {
-		cells := "\"  OXXO  X\""
-		grid := Grid{}
-		grid.FromString(cells)
-		want := "---------\n" +
-			"|     O |\n" +
-			"| X X O |\n" +
-			"|     X |\n" +
-			"---------\n"
-		assertWriterOutput(t, grid, want)
-	})
-
-	t.Run("full", func(t *testing.T) {
-		cells := "\"OOOXXOOXX\""
-		grid := Grid{}
-		grid.FromString(cells)
-		want := "---------\n" +
-			"| O O O |\n" +
-			"| X X O |\n" +
-			"| O X X |\n" +
-			"---------\n"
-		assertWriterOutput(t, grid, want)
-	})
-
-	t.Run("empty", func(t *testing.T) {
-		cells := "\"         \""
-		grid := Grid{}
-		grid.FromString(cells)
-		want := "---------\n" +
-			"|       |\n" +
-			"|       |\n" +
-			"|       |\n" +
-			"---------\n"
-		assertWriterOutput(t, grid, want)
-	})
-}
-
 func TestHumanMove(t *testing.T) {
-	cells := "X X O    "
-	grid := Grid{}
-	grid.FromString(cells)
+	t.Run("valid input", func(t *testing.T) {
+		grid := Grid{}
+		grid.FromString("\"         \"")
+		grid.HumanMove("1 1", "X")
+		want := "---------\n" +
+			"|       |\n" +
+			"|       |\n" +
+			"| X     |\n" +
+			"---------\n"
+		assertWriterOutput(t, grid, want)
+	})
 }
 
 func assertWriterOutput(t *testing.T, grid Grid, want string) {

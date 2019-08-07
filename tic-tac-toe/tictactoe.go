@@ -1,9 +1,11 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
 	"io"
 	"os"
+	"strconv"
 	"strings"
 )
 
@@ -30,6 +32,15 @@ type XOCounts struct {
 }
 
 type Grid [3][3]string
+
+func (g *Grid) HumanMove(move, team string) {
+	coords := strings.Split(move, " ")
+	row, _ := strconv.Atoi(coords[1])
+	col, _ := strconv.Atoi(coords[0])
+	row = 3 - row
+	col -= 1
+	g[row][col] = team
+}
 
 func (g Grid) GameState() string {
 	s := State{}
@@ -71,9 +82,13 @@ func (g Grid) Print(writer io.Writer) {
 }
 
 func (g *Grid) FromString(cells string) {
-	cells = strings.Trim(cells, "\"")
+	cells = strings.ReplaceAll(cells, "\"", "")
 	for i, char := range cells {
-		g[i/3][i%3] = string(char)
+		if char == ' ' {
+			g[i/3][i%3] = " "
+		} else {
+			g[i/3][i%3] = string(char)
+		}
 	}
 }
 
@@ -153,14 +168,21 @@ func (g Grid) checkCols(s *State, counts *XOCounts, row, col int) bool {
 }
 
 func main() {
-	grid := Grid{}
-	fmt.Print("Enter a state: ")
-	var input string
-	fmt.Scanln(&input)
-	grid.FromString(input)
-	fmt.Println()
-	grid.Print(os.Stdout)
-	fmt.Printf("\n%s\n", grid.GameState())
+	fmt.Print("Enter board state:")
+	g := Grid{}
+	text := stringFromConsole(os.Stdin)
+	g.FromString(text)
+	g.Print(os.Stdout)
+	fmt.Print("Enter your move: ")
+	text = stringFromConsole(os.Stdin)
+	g.HumanMove(text, X)
+	g.Print(os.Stdout)
+}
+
+func stringFromConsole(reader io.Reader) string {
+	scanner := bufio.NewScanner(reader)
+	scanner.Scan()
+	return scanner.Text()
 }
 
 func abs(x int) int {
