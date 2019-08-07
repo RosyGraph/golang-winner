@@ -40,6 +40,9 @@ func (g *Grid) HumanMove(move, team string) error {
 	col, _ := strconv.Atoi(coords[0])
 	row = 3 - row
 	col -= 1
+	if row > 2 || row < 0 || col > 2 || col < 0 {
+		return errors.New("oh no")
+	}
 	if g[row][col] == X || g[row][col] == O {
 		return errors.New("oh no")
 	}

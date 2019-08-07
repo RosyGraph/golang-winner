@@ -82,13 +82,17 @@ func TestHumanMove(t *testing.T) {
 	t.Run("valid input", func(t *testing.T) {
 		grid := Grid{}
 		grid.FromString("\"         \"")
-		grid.HumanMove("1 1", "X")
+		err := grid.HumanMove("1 1", "X")
 		want := "---------\n" +
 			"|       |\n" +
 			"|       |\n" +
 			"| X     |\n" +
 			"---------\n"
 		assertWriterOutput(t, grid, want)
+
+		if err != nil {
+			t.Error(err)
+		}
 	})
 
 	t.Run("cell is occupied", func(t *testing.T) {
@@ -104,13 +108,11 @@ func TestHumanMove(t *testing.T) {
 	t.Run("input is not 2 numbers", func(t *testing.T) {
 		grid := Grid{}
 		grid.FromString("\"         \"")
-		grid.HumanMove("1 1", "X")
-		want := "---------\n" +
-			"|       |\n" +
-			"|       |\n" +
-			"| X     |\n" +
-			"---------\n"
-		assertWriterOutput(t, grid, want)
+		err := grid.HumanMove("a 1", X)
+
+		if err == nil {
+			t.Error("wanted an error but didn't get one")
+		}
 	})
 
 	t.Run("input outside 1 to 3", func(t *testing.T) {
