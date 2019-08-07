@@ -79,15 +79,41 @@ func TestPrintState(t *testing.T) {
 }
 
 func TestFromString(t *testing.T) {
-	cells := "\"O OXXO XX\""
-	grid := Grid{}
-	grid.FromString(cells)
-	want := "---------\n" +
-		"| O   O |\n" +
-		"| X X O |\n" +
-		"|   X X |\n" +
-		"---------\n"
-	assertWriterOutput(t, grid, want)
+	t.Run("mix", func(t *testing.T) {
+		cells := "\"  OXXO  X\""
+		grid := Grid{}
+		grid.FromString(cells)
+		want := "---------\n" +
+			"|     O |\n" +
+			"| X X O |\n" +
+			"|     X |\n" +
+			"---------\n"
+		assertWriterOutput(t, grid, want)
+	})
+
+	t.Run("full", func(t *testing.T) {
+		cells := "\"OOOXXOOXX\""
+		grid := Grid{}
+		grid.FromString(cells)
+		want := "---------\n" +
+			"| O O O |\n" +
+			"| X X O |\n" +
+			"| O X X |\n" +
+			"---------\n"
+		assertWriterOutput(t, grid, want)
+	})
+
+	t.Run("empty", func(t *testing.T) {
+		cells := "\"         \""
+		grid := Grid{}
+		grid.FromString(cells)
+		want := "---------\n" +
+			"|       |\n" +
+			"|       |\n" +
+			"|       |\n" +
+			"---------\n"
+		assertWriterOutput(t, grid, want)
+	})
 }
 
 func TestHumanMove(t *testing.T) {
