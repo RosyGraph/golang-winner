@@ -5,9 +5,11 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"math/rand"
 	"os"
 	"strconv"
 	"strings"
+	"time"
 )
 
 const X = "X"
@@ -51,6 +53,26 @@ func (g *Grid) HumanMove(move, team string) error {
 	}
 	g[row][col] = team
 	return nil
+}
+
+func (g *Grid) EasyMove(team string) {
+	emptyCells := [][2]int{}
+	for rowIndex, row := range g {
+		for colIndex, value := range row {
+			if value == " " {
+				emptyCell := [2]int{rowIndex, colIndex}
+				emptyCells = append(emptyCells, emptyCell)
+			}
+		}
+	}
+
+	seed := rand.NewSource(time.Now().UnixNano())
+	random := rand.New(seed)
+
+	move := random.Intn(len(emptyCells))
+	randRow := emptyCells[move][0]
+	randCol := emptyCells[move][1]
+	g[randRow][randCol] = team
 }
 
 func (g Grid) GameState() string {
@@ -187,6 +209,9 @@ func main() {
 	fmt.Print("Enter your move: ")
 	text = stringFromConsole(os.Stdin)
 	g.HumanMove(text, X)
+	g.Print(os.Stdout)
+	fmt.Println("Making easy move...")
+	g.EasyMove(O)
 	g.Print(os.Stdout)
 }
 

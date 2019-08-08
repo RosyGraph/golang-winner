@@ -126,6 +126,26 @@ func TestHumanMove(t *testing.T) {
 	})
 }
 
+func TestEasyMove(t *testing.T) {
+	g := Grid{}
+	g.FromString("\"  XO  OX \"")
+	g.EasyMove(X)
+
+	want := 3
+	xCount := 0
+	for row := 0; row < 3; row++ {
+		for col := 0; col < 3; col++ {
+			if g[row][col] == X {
+				xCount++
+			}
+		}
+	}
+
+	if xCount != want {
+		t.Errorf("wanted %d X's got %d", want, xCount)
+	}
+}
+
 func assertWriterOutput(t *testing.T, grid Grid, want string) {
 	t.Helper()
 
