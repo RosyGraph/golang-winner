@@ -8,69 +8,23 @@ import (
 func TestPrintState(t *testing.T) {
 
 	stateTests := []struct {
-		name string
-		grid Grid
-		want string
+		name       string
+		gridString string
+		want       string
 	}{
-		{
-			name: "X wins",
-			grid: Grid{
-				{"X", "X", "X"},
-				{"O", " ", "O"},
-				{"X", "X", "O"},
-			},
-			want: "X wins",
-		},
-		{
-			name: "O wins",
-			grid: Grid{
-				{"O", "X", "X"},
-				{"O", "O", "X"},
-				{"X", "X", "O"},
-			},
-			want: "O wins",
-		},
-		{
-			name: "draw",
-			grid: Grid{
-				{"X", "X", "O"},
-				{"O", "O", "X"},
-				{"X", "X", "O"},
-			},
-			want: "Draw",
-		},
-		{
-			name: "not finished",
-			grid: Grid{
-				{" ", " ", " "},
-				{" ", " ", " "},
-				{" ", " ", " "},
-			},
-			want: "Game not finished",
-		},
-		{
-			name: "too many Xs",
-			grid: Grid{
-				{"X", "X", "X"},
-				{"O", "X", "O"},
-				{"X", "X", "O"},
-			},
-			want: "Impossible",
-		},
-		{
-			name: "both won",
-			grid: Grid{
-				{" ", "X", "O"},
-				{"O", "X", "O"},
-				{"X", "X", "O"},
-			},
-			want: "Impossible",
-		},
+		{name: "X wins", gridString: `"XXXO OXXO"`, want: "X wins"},
+		{name: "O wins", gridString: `"OXXOOXXXO"`, want: "O wins"},
+		{name: "draw", gridString: `"XXOOOXXXO"`, want: "Draw"},
+		{name: "not finished", gridString: `"         "`, want: "Game not finished"},
+		{name: "too many Xs", gridString: `"XXXOXOXXO"`, want: "Impossible"},
+		{name: "both won", gridString: `" XOOXOXXO"`, want: "Impossible"},
 	}
 
 	for _, tt := range stateTests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := tt.grid.GameState()
+			grid := Grid{}
+			grid.FromString(tt.gridString)
+			got := grid.GameState()
 			if got != tt.want {
 				t.Errorf("got %s want %s", got, tt.want)
 			}
