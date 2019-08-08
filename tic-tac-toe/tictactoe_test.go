@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"reflect"
 	"testing"
 )
 
@@ -33,51 +34,37 @@ func TestPrintState(t *testing.T) {
 }
 
 func TestHumanMove(t *testing.T) {
-	t.Run("valid input", func(t *testing.T) {
-		grid := Grid{}
-		grid.FromString("\"         \"")
-		err := grid.HumanMove("1 1", "X")
-		want := "---------\n" +
-			"|       |\n" +
-			"|       |\n" +
-			"| X     |\n" +
-			"---------\n"
-		assertWriterOutput(t, grid, want)
+	humanTests := []struct {
+		name       string
+		gridString string
+		move       string
+		team       string
+		err        error
+		want       string
+	}{
+		{name: "valid input", gridString: `"         "`, move: "1 1", team: X, err: nil, want: `"      X  "`},
+		{name: "cell is occupied", gridString: `"X        "`, move: "1 3", team: X, err: ErrCellOccupied, want: `"X        "`},
+		{name: "input is not 2 numbers", gridString: `"         "`, move: "a 1", team: X, err: ErrInvalidInput, want: `"         "`},
+		{name: "input outside 1 to 3", gridString: `"         "`, move: "4 5", team: O, err: ErrInvalidInput, want: `"         "`},
+	}
 
-		if err != nil {
-			t.Error(err)
-		}
-	})
+	for _, tt := range humanTests {
+		t.Run(tt.name, func(t *testing.T) {
+			grid := Grid{}
+			grid.FromString(tt.gridString)
+			err := grid.HumanMove(tt.move, tt.team)
 
-	t.Run("cell is occupied", func(t *testing.T) {
-		grid := Grid{}
-		grid.FromString("\"X        \"")
-		err := grid.HumanMove("1 3", X)
+			if err != tt.err {
+				t.Errorf("wanted %q got %q", tt.err, err)
+			}
 
-		if err != ErrCellOccupied {
-			t.Errorf("wanted %q error but didn't get one", ErrCellOccupied)
-		}
-	})
-
-	t.Run("input is not 2 numbers", func(t *testing.T) {
-		grid := Grid{}
-		grid.FromString("\"         \"")
-		err := grid.HumanMove("a 1", X)
-
-		if err != ErrInvalidInput {
-			t.Errorf("wanted %q error but didn't get one", ErrInvalidInput)
-		}
-	})
-
-	t.Run("input outside 1 to 3", func(t *testing.T) {
-		grid := Grid{}
-		grid.FromString("\"         \"")
-		err := grid.HumanMove("4 5", X)
-
-		if err != ErrInvalidInput {
-			t.Errorf("wanted %q error but didn't get one", ErrInvalidInput)
-		}
-	})
+			want := Grid{}
+			want.FromString(tt.want)
+			if !reflect.DeepEqual(grid, want) {
+				t.Errorf("wanted %v got %v", want, grid)
+			}
+		})
+	}
 }
 
 func TestEasyMove(t *testing.T) {
