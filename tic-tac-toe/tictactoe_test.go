@@ -6,8 +6,11 @@ import (
 	"testing"
 )
 
-func TestPrintState(t *testing.T) {
+func TestGame(t *testing.T) {
 
+}
+
+func TestPrintState(t *testing.T) {
 	stateTests := []struct {
 		name       string
 		gridString string
