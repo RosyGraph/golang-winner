@@ -9,15 +9,11 @@ import (
 
 func TestHelloWorld(t *testing.T) {
 
-	slowServer := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		time.Sleep(20 * time.Millisecond)
-		w.WriteHeader(http.StatusOK)
-	}))
+	slowServer := makeDelayedServer(time.Millisecond(20))
+	fastServer := makeDelayedServer(time.Millisecond(10))
 
-	fastServer := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		time.Sleep(10 * time.Millisecond)
-		w.WriteHeader(http.StatusOK)
-	}))
+	defer slowServer.Close()
+	defer fastServer.Close()
 
 	slowURL := slowServer.URL
 	fastURL := fastServer.URL
@@ -28,7 +24,11 @@ func TestHelloWorld(t *testing.T) {
 	if got != want {
 		t.Errorf("got %q want %q", got, want)
 	}
+}
 
-	slowServer.Close()
-	fastServer.Close()
+func makeDelayedServer(delay time.Duration) *httptest.Server {
+	return httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		time.Sleep(duration)
+		w.WriteHeader(http.StatusOK)
+	}))
 }
