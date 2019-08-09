@@ -13,11 +13,15 @@ func TestPrintState(t *testing.T) {
 		gridString string
 		want       string
 	}{
-		{name: "X wins", gridString: `"XXXO OXXO"`, want: "X wins"},
-		{name: "O wins", gridString: `"OXXOOXXXO"`, want: "O wins"},
+		{name: "X wins row", gridString: `"XXXO OXXO"`, want: "X wins"},
+		{name: "X wins col", gridString: `"XOOX OXX "`, want: "X wins"},
+		{name: "O wins row", gridString: `"OOOXX X  "`, want: "O wins"},
+		{name: "O wins col", gridString: `"OXXOOXXXO"`, want: "O wins"},
 		{name: "draw", gridString: `"XXOOOXXXO"`, want: "Draw"},
 		{name: "not finished", gridString: `"         "`, want: "Game not finished"},
 		{name: "too many Xs", gridString: `"XXXOXOXXO"`, want: "Impossible"},
+		{name: "both won", gridString: `" XOOXOXXO"`, want: "Impossible"},
+		{name: "X win in row O win in row", gridString: `"XXXOOOX  "`, want: "Impossible"},
 		{name: "both won", gridString: `" XOOXOXXO"`, want: "Impossible"},
 	}
 
@@ -93,17 +97,23 @@ func TestEasyMove(t *testing.T) {
 	g.EasyMove(X)
 
 	want := 3
-	xCount := 0
-	for row := 0; row < 3; row++ {
-		for col := 0; col < 3; col++ {
-			if g[row][col] == X {
-				xCount++
+	assertNum(t, g, X, want)
+}
+
+func assertNum(t *testing.T, g Grid, team string, want int) {
+	t.Helper()
+
+	got := 0
+	for _, row := range g {
+		for _, v := range row {
+			if v == team {
+				got++
 			}
 		}
 	}
 
-	if xCount != want {
-		t.Errorf("wanted %d X's got %d", want, xCount)
+	if want != got {
+		t.Fatalf("got %v %ves want %v", got, team, want)
 	}
 }
 
