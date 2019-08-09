@@ -200,19 +200,21 @@ func (g Grid) checkCols(s *State, counts *XOCounts, row, col int) bool {
 	return true
 }
 
-func main() {
-	g := Grid{}
+func (g Grid) Game() {
 	g.FromString("         ")
 	for g.GameState() == "Game not finished" {
 		g.Print(os.Stdout)
 		fmt.Print("Enter your move: ")
 		input := stringFromConsole(os.Stdin)
+		err := g.HumanMove(input, X)
 		fmt.Println()
-		for g.HumanMove(input, X) != nil {
+		for err != nil {
+			fmt.Println(err)
 			g.Print(os.Stdout)
 			fmt.Print("Enter your move: ")
 			input = stringFromConsole(os.Stdin)
 			fmt.Println()
+			err = g.HumanMove(input, X)
 		}
 		if g.GameState() != "Game not finished" {
 			g.Print(os.Stdout)
@@ -223,6 +225,11 @@ func main() {
 		g.EasyMove(O)
 		g.Print(os.Stdout)
 	}
+}
+
+func main() {
+	g := Grid{}
+	g.Game()
 }
 
 func stringFromConsole(reader io.Reader) string {
