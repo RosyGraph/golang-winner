@@ -9,8 +9,8 @@ import (
 
 func TestHelloWorld(t *testing.T) {
 
-	slowServer := makeDelayedServer(time.Millisecond(20))
-	fastServer := makeDelayedServer(time.Millisecond(10))
+	slowServer := makeDelayedServer(20 * time.Millisecond)
+	fastServer := makeDelayedServer(0 * time.Millisecond)
 
 	defer slowServer.Close()
 	defer fastServer.Close()
@@ -28,7 +28,7 @@ func TestHelloWorld(t *testing.T) {
 
 func makeDelayedServer(delay time.Duration) *httptest.Server {
 	return httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		time.Sleep(duration)
+		time.Sleep(delay)
 		w.WriteHeader(http.StatusOK)
 	}))
 }
