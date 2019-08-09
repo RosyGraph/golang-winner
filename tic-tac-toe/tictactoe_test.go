@@ -33,6 +33,22 @@ func TestPrintState(t *testing.T) {
 	}
 }
 
+func TestPrint(t *testing.T) {
+	g := Grid{
+		{X, X, O},
+		{O, X, O},
+		{X, O, X},
+	}
+
+	want := `---------
+| X X O |
+| O X O |
+| X O X |
+---------
+`
+	assertWriterOutput(t, g, want)
+}
+
 func TestHumanMove(t *testing.T) {
 	humanTests := []struct {
 		name       string
@@ -42,10 +58,14 @@ func TestHumanMove(t *testing.T) {
 		err        error
 		want       string
 	}{
-		{name: "valid input", gridString: `"         "`, move: "1 1", team: X, err: nil, want: `"      X  "`},
-		{name: "cell is occupied", gridString: `"X        "`, move: "1 3", team: X, err: ErrCellOccupied, want: `"X        "`},
-		{name: "input is not 2 numbers", gridString: `"         "`, move: "a 1", team: X, err: ErrInvalidInput, want: `"         "`},
-		{name: "input outside 1 to 3", gridString: `"         "`, move: "4 5", team: O, err: ErrInvalidInput, want: `"         "`},
+		{name: "valid input", gridString: `"         "`, move: "1 1",
+			team: X, err: nil, want: `"      X  "`},
+		{name: "cell is occupied", gridString: `"X        "`, move: "1 3",
+			team: X, err: ErrCellOccupied, want: `"X        "`},
+		{name: "input is not 2 numbers", gridString: `"         "`, move: "a 1",
+			team: X, err: ErrInvalidInput, want: `"         "`},
+		{name: "input outside 1 to 3", gridString: `"         "`, move: "4 5",
+			team: O, err: ErrInvalidInput, want: `"         "`},
 	}
 
 	for _, tt := range humanTests {
