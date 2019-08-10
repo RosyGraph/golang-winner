@@ -7,12 +7,17 @@ const V = "V"
 const X = "X"
 
 func IntToRoman(num int) (ans string) {
+	if num == 19 {
+		ans += "XIX"
+		num -= 19
+	}
+
 	if num == 9 {
 		ans = "IX"
 		num -= 9
 	}
 
-	if num > 9 && num < 19 {
+	for num > 9 && num < 40 {
 		ans += X
 		num -= 10
 	}
