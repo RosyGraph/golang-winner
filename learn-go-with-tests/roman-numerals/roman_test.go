@@ -8,6 +8,8 @@ func TestIntToRoman(t *testing.T) {
 		romanNum string
 	}{
 		{integer: 1, romanNum: "I"},
+		{integer: 2, romanNum: "II"},
+		{integer: 3, romanNum: "III"},
 	}
 
 	for _, tt := range cases {

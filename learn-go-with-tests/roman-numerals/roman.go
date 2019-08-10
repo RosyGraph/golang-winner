@@ -2,8 +2,11 @@ package main
 
 import "fmt"
 
-func IntToRoman(num int) string {
-	return "I"
+func IntToRoman(num int) (ans string) {
+	for ; num > 0; num-- {
+		ans += "I"
+	}
+	return
 }
 
 func main() {
