@@ -7,16 +7,15 @@ func TestIntToRoman(t *testing.T) {
 		integer int
 		roman   string
 	}{
-		{integer: 1, roman: "I"},
 		{integer: 2, roman: "II"},
-		{integer: 3, roman: "III"},
 		{integer: 4, roman: "IV"},
 		{integer: 5, roman: "V"},
-		{integer: 6, roman: "VI"},
 		{integer: 7, roman: "VII"},
-		{integer: 8, roman: "VIII"},
 		{integer: 9, roman: "IX"},
 		{integer: 10, roman: "X"},
+		{integer: 11, roman: "XI"},
+		{integer: 14, roman: "XIV"},
+		{integer: 17, roman: "XVII"},
 	}
 
 	for _, tt := range cases {
