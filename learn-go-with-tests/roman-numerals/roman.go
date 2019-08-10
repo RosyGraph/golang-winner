@@ -2,27 +2,31 @@ package main
 
 import "fmt"
 
-func IntToRoman(num int) (ans string) {
-	if num == 4 {
-		ans = "IV"
-	}
+const I = "I"
+const V = "V"
+const X = "X"
 
+func IntToRoman(num int) (ans string) {
 	if num == 9 {
 		ans = "IX"
 	}
 
 	if num > 9 && num < 14 {
-		ans = "X"
+		ans += X
 		num -= 10
 	}
 
+	if num == 4 {
+		ans += "IV"
+	}
+
 	if num > 4 && num < 9 {
-		ans = "V"
+		ans = V
 		num -= 5
 	}
 
 	for ; num > 0 && num < 4; num-- {
-		ans += "I"
+		ans += I
 	}
 	return
 }
