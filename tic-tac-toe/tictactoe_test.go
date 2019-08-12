@@ -2,9 +2,31 @@ package main
 
 import (
 	"bytes"
+	"io"
 	"reflect"
 	"testing"
 )
+
+type MockRandomizer struct{}
+
+func (r *MockRandomizer) RandomChoice(arr [][2]int) [2]int {
+	return arr[0]
+}
+
+func TestPlayGame(t *testing.T) {
+	t.Run("human vs computer", func(t *testing.T) {
+		var b bytes.Buffer
+		b.WriteString("1 1\n2 2\n3 3\n")
+		buffer := io.Reader(&b)
+		randomizer := MockRandomizer{}
+		got := PlayGame(buffer, &randomizer)
+		want := "X wins"
+
+		if got != want {
+			t.Errorf("got %s want %s", got, want)
+		}
+	})
+}
 
 func TestPrintState(t *testing.T) {
 	stateTests := []struct {
@@ -69,9 +91,12 @@ func TestHumanMove(t *testing.T) {
 
 	for _, tt := range humanTests {
 		t.Run(tt.name, func(t *testing.T) {
+			var b bytes.Buffer
+			b.WriteString(tt.move)
+			buffer := io.Reader(&b)
 			grid := Grid{}
 			grid.FromString(tt.gridString)
-			err := grid.HumanMove(tt.move, tt.team)
+			err := grid.HumanMove(buffer, tt.team)
 
 			if err != tt.err {
 				t.Errorf("wanted %q got %q", tt.err, err)
@@ -89,7 +114,8 @@ func TestHumanMove(t *testing.T) {
 func TestEasyMove(t *testing.T) {
 	g := Grid{}
 	g.FromString("\"  XO  OX \"")
-	g.EasyMove(X)
+	var randomizer DefaultRandomizer
+	g.EasyMove(&randomizer, X)
 
 	want := 3
 	assertNum(t, g, X, want)

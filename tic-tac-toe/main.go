@@ -39,7 +39,48 @@ type XOCounts struct {
 
 type Grid [3][3]string
 
-func (g *Grid) HumanMove(move, team string) error {
+type Randomizer interface {
+	RandomChoice(arr [][2]int) [2]int
+}
+
+type DefaultRandomizer struct{}
+
+func PlayGame(reader io.Reader, randomizer Randomizer) string {
+	g := EmptyGrid()
+	for g.GameState() == "Game not finished" {
+		g.Print(os.Stdout)
+		fmt.Print("Enter your move")
+		err := g.HumanMove(reader, X)
+		fmt.Println()
+		for err != nil {
+			fmt.Println(err)
+			g.Print(os.Stdout)
+			fmt.Print("Enter your move: ")
+			fmt.Println()
+			err = g.HumanMove(reader, X)
+		}
+		if g.GameState() != "Game not finished" {
+			g.Print(os.Stdout)
+			fmt.Println("You win!")
+			break
+		}
+		fmt.Println("Making easy move...")
+		g.EasyMove(randomizer, O)
+		g.Print(os.Stdout)
+	}
+	return g.GameState()
+}
+
+func (r *DefaultRandomizer) RandomChoice(arr [][2]int) [2]int {
+	seed := rand.NewSource(time.Now().UnixNano())
+	random := rand.New(seed)
+	i := random.Intn(len(arr))
+
+	return arr[i]
+}
+
+func (g *Grid) HumanMove(reader io.Reader, team string) error {
+	move := Scanln(reader)
 	coords := strings.Split(move, " ")
 	row, _ := strconv.Atoi(coords[1])
 	col, _ := strconv.Atoi(coords[0])
@@ -55,7 +96,7 @@ func (g *Grid) HumanMove(move, team string) error {
 	return nil
 }
 
-func (g *Grid) EasyMove(team string) {
+func (g *Grid) EasyMove(randomizer Randomizer, team string) {
 	emptyCells := [][2]int{}
 	for rowIndex, row := range g {
 		for colIndex, value := range row {
@@ -65,13 +106,9 @@ func (g *Grid) EasyMove(team string) {
 			}
 		}
 	}
-
-	seed := rand.NewSource(time.Now().UnixNano())
-	random := rand.New(seed)
-
-	move := random.Intn(len(emptyCells))
-	randRow := emptyCells[move][0]
-	randCol := emptyCells[move][1]
+	move := randomizer.RandomChoice(emptyCells)
+	randRow := move[0]
+	randCol := move[1]
 	g[randRow][randCol] = team
 }
 
@@ -200,39 +237,13 @@ func (g Grid) checkCols(s *State, counts *XOCounts, row, col int) bool {
 	return true
 }
 
-func (g Grid) Game() {
-	g.FromString("         ")
-	for g.GameState() == "Game not finished" {
-		g.Print(os.Stdout)
-		fmt.Print("Enter your move: ")
-		input := stringFromConsole(os.Stdin)
-		err := g.HumanMove(input, X)
-		fmt.Println()
-		for err != nil {
-			fmt.Println(err)
-			g.Print(os.Stdout)
-			fmt.Print("Enter your move: ")
-			input = stringFromConsole(os.Stdin)
-			fmt.Println()
-			err = g.HumanMove(input, X)
-		}
-		if g.GameState() != "Game not finished" {
-			g.Print(os.Stdout)
-			fmt.Println("You win!")
-			break
-		}
-		fmt.Println("Making easy move...")
-		g.EasyMove(O)
-		g.Print(os.Stdout)
-	}
-}
-
-func main() {
+func EmptyGrid() Grid {
 	g := Grid{}
-	g.Game()
+	g.FromString("         ")
+	return g
 }
 
-func stringFromConsole(reader io.Reader) string {
+func Scanln(reader io.Reader) string {
 	scanner := bufio.NewScanner(reader)
 	scanner.Scan()
 	return scanner.Text()
