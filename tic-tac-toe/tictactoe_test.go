@@ -6,10 +6,6 @@ import (
 	"testing"
 )
 
-func TestGame(t *testing.T) {
-
-}
-
 func TestPrintState(t *testing.T) {
 	stateTests := []struct {
 		name       string
@@ -41,11 +37,7 @@ func TestPrintState(t *testing.T) {
 }
 
 func TestPrint(t *testing.T) {
-	g := Grid{
-		{X, X, O},
-		{O, X, O},
-		{X, O, X},
-	}
+	g := Grid{{X, X, O}, {O, X, O}, {X, O, X}}
 
 	want := `---------
 | X X O |
