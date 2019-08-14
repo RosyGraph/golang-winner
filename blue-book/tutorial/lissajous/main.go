@@ -1,31 +1,49 @@
 package main
 
 import (
+	"fmt"
 	"image"
 	"image/color"
 	"image/gif"
 	"io"
+	"log"
 	"math"
 	"math/rand"
-	"os"
+	"net/http"
+	"strconv"
 )
 
-var palette = []color.Color{color.Black, color.Green}
+var palette = []color.Color{color.Black, color.White}
 
 const (
 	blackIndex = 0 // first color in palette
-	greenIndex = 1 // next color in palette
+	whiteIndex = 1 // next color in palette
 )
 
 func main() {
-	lissajous(os.Stdout)
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		if err := r.ParseForm(); err != nil {
+			log.Print(err)
+		}
+		if len(r.Form["size"]) == 0 {
+			fmt.Fprintf(w, "error: no size parameter")
+			return
+		}
+		var sizeString string = r.Form["size"][0]
+		size, err := strconv.Atoi(sizeString)
+		if err != nil {
+			fmt.Fprintf(w, "error parsing size: %v", err)
+		}
+		lissajous(w, float64(size))
+	}
+	http.HandleFunc("/", handler)
+	log.Fatal(http.ListenAndServe("localhost:8000", nil))
 }
 
-func lissajous(out io.Writer) {
+func lissajous(out io.Writer, size float64) {
 	const (
 		cycles  = 5     // number of complete x oscillator revolutions
 		res     = 0.001 // angular resolution
-		size    = 100   // image canvas covers [-size..+size]
 		nframes = 64    // number of animation frames
 		delay   = 8     // delay between frames in 10ms units
 	)
@@ -33,13 +51,13 @@ func lissajous(out io.Writer) {
 	anim := gif.GIF{LoopCount: nframes}
 	phase := 0.0 // phase difference
 	for i := 0; i < nframes; i++ {
-		rect := image.Rect(0, 0, 2*size+1, 2*size+1)
+		rect := image.Rect(0, 0, 2*int(size)+1, 2*int(size)+1)
 		img := image.NewPaletted(rect, palette)
 		for t := 0.0; t < cycles*2*math.Pi; t += res {
 			x := math.Sin(t)
 			y := math.Sin(t*freq + phase)
-			img.SetColorIndex(size+int(x*size+0.5), size+int(y*size+0.5),
-				greenIndex)
+			img.SetColorIndex(int(size)+int(x*size+0.5), int(size)+int(y*size+0.5),
+				whiteIndex)
 		}
 		phase += 0.1
 		anim.Delay = append(anim.Delay, delay)
