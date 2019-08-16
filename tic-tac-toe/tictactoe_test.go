@@ -1,9 +1,11 @@
 package main
 
 import (
+	"bufio"
 	"bytes"
 	"io"
 	"reflect"
+	"strings"
 	"testing"
 )
 
@@ -15,11 +17,11 @@ func (r *MockRandomizer) RandomChoice(arr [][2]int) [2]int {
 
 func TestPlayGame(t *testing.T) {
 	t.Run("human vs computer", func(t *testing.T) {
-		var b bytes.Buffer
-		b.WriteString("1 1\n2 2\n3 3\n")
-		buffer := io.Reader(&b)
+		input := "1 1\n2 2\n3 3\n"
+		reader := bufio.NewReader(strings.NewReader(input))
+
 		randomizer := MockRandomizer{}
-		got := PlayGame(buffer, &randomizer)
+		got := PlayGame(reader, &randomizer)
 		want := "X wins"
 
 		if got != want {

@@ -45,14 +45,18 @@ type Randomizer interface {
 
 type DefaultRandomizer struct{}
 
+func main() {
+	var random *DefaultRandomizer
+	PlayGame(os.Stdin, random)
+}
+
 func PlayGame(reader io.Reader, randomizer Randomizer) string {
 	g := EmptyGrid()
 	for g.GameState() == "Game not finished" {
 		g.Print(os.Stdout)
 		fmt.Print("Enter your move")
-		err := g.HumanMove(reader, X)
 		fmt.Println()
-		for err != nil {
+		for err := g.HumanMove(reader, X); err != nil; {
 			fmt.Println(err)
 			g.Print(os.Stdout)
 			fmt.Print("Enter your move: ")
@@ -66,7 +70,6 @@ func PlayGame(reader io.Reader, randomizer Randomizer) string {
 		}
 		fmt.Println("Making easy move...")
 		g.EasyMove(randomizer, O)
-		g.Print(os.Stdout)
 	}
 	return g.GameState()
 }
@@ -82,6 +85,7 @@ func (r *DefaultRandomizer) RandomChoice(arr [][2]int) [2]int {
 func (g *Grid) HumanMove(reader io.Reader, team string) error {
 	move := Scanln(reader)
 	coords := strings.Split(move, " ")
+	fmt.Println(move)
 	row, _ := strconv.Atoi(coords[1])
 	col, _ := strconv.Atoi(coords[0])
 	row = 3 - row
@@ -244,9 +248,9 @@ func EmptyGrid() Grid {
 }
 
 func Scanln(reader io.Reader) string {
-	scanner := bufio.NewScanner(reader)
-	scanner.Scan()
-	return scanner.Text()
+	sc := bufio.NewScanner(reader)
+	sc.Scan()
+	return sc.Text()
 }
 
 func abs(x int) int {
