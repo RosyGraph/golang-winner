@@ -50,6 +50,18 @@ func main() {
 	PlayGame(os.Stdin, random)
 }
 
+/* func promptHuman(g *Grid, reader io.Reader) {
+	fmt.Print("Enter your move")
+	fmt.Println()
+	for err := g.HumanMove(reader, X); err != nil; {
+		fmt.Println(err)
+		g.Print(os.Stdout)
+		fmt.Print("Enter your move: ")
+		fmt.Println()
+		err = g.HumanMove(reader, X)
+	}
+} */
+
 func PlayGame(reader io.Reader, randomizer Randomizer) string {
 	g := EmptyGrid()
 	for g.GameState() == "Game not finished" {
