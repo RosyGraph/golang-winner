@@ -1,3 +1,4 @@
+// Echo2 mimicks Unix's echo command using iteration.
 package main
 
 import (

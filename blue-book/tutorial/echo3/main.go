@@ -1,3 +1,4 @@
+// Echo3 mimicks Unix's echo command using iteration and Printf.
 package main
 
 import (

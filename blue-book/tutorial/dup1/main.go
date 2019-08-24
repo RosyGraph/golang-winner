@@ -1,3 +1,4 @@
+// Dup1 prints the counts of words from Stdin.
 package main
 
 import (

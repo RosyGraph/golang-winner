@@ -1,3 +1,4 @@
+// Echo1 mimicks Unix's echo command.
 package main
 
 import (

@@ -8,7 +8,23 @@ import (
 const pi float64 = math.Pi
 
 func main() {
-	fmt.Println(h(2.5))
+	primes(100)
+}
+
+func primes(x int) {
+	flag := true
+	for i := 2; i < x; i++ {
+		for j := 2; j < i; j++ {
+			if i%j == 0 {
+				flag = false
+				break
+			}
+		}
+		if flag {
+			fmt.Println(i)
+		}
+		flag = true
+	}
 }
 
 func h(t float64) float64 {
