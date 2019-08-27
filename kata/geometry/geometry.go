@@ -25,7 +25,7 @@ type Square struct {
 }
 
 func (s Square) Perimeter() float64 {
-	return 0.0
+	return s.side * 4.0
 }
 
 func (s Square) Area() float64 {
@@ -38,7 +38,7 @@ type Rectangle struct {
 }
 
 func (r Rectangle) Perimeter() float64 {
-	return 0.0
+	return r.length*2.0 + r.width*2.0
 }
 
 func (r Rectangle) Area() float64 {

@@ -1,6 +1,9 @@
 package main
 
-import "testing"
+import (
+	"math"
+	"testing"
+)
 
 func TestArea(t *testing.T) {
 	testCases := []struct {
@@ -28,16 +31,21 @@ func TestPerimeter(t *testing.T) {
 	}{
 		{name: "perimeter of a square", shape: Square{3}, want: 12.0},
 		{name: "perimeter of a rectangle", shape: Rectangle{3, 4}, want: 14.0},
-		{name: "perimeter of a circle", shape: Circle{10}, want: 314.1592653589793},
+		{name: "perimeter of a circle", shape: Circle{1}, want: 2 * math.Pi},
 		{name: "perimeter of a triangle", shape: Triangle{2, 3}, want: 3},
 	}
 	for _, c := range testCases {
 		t.Run(c.name, func(t *testing.T) {
-			got := c.shape.Perimeter()
-			if got != c.want {
-				t.Errorf("got %v want %v", got, c.want)
-			}
+			assertPerimeter(t, c.shape, c.want)
 		})
+	}
+}
+
+func assertPerimeter(t *testing.T, shape Shape, want float64) {
+	t.Helper()
+	got := shape.Perimeter()
+	if got != want {
+		t.Errorf("got %v want %v", got, want)
 	}
 }
 
@@ -47,5 +55,4 @@ func assertArea(t *testing.T, shape Shape, want float64) {
 	if got != want {
 		t.Errorf("got %v want %v", got, want)
 	}
-
 }
