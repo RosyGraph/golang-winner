@@ -50,7 +50,7 @@ type Circle struct {
 }
 
 func (c Circle) Perimeter() float64 {
-	return 0.0
+	return 2 * c.radius * math.Pi
 }
 
 func (c Circle) Area() float64 {
