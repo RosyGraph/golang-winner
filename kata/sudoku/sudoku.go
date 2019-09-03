@@ -73,7 +73,7 @@ func main() {
 }
 
 func IsSolved(s string) bool {
-	rows := strings.Split("\n")
+	rows := strings.Split(s, "\n")
 	for _, row := range rows {
 		for _, v := range row {
 			fmt.Print(v)
