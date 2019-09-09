@@ -2,11 +2,10 @@ package main
 
 import "fmt"
 
-const Sharp = "♯"
-const Flat = "♭"
-const Dblsharp = "𝄪"
-const Dblflat = "𝄫"
-const Alphabet = "ABCDEFG"
+const Sharp = '♯'
+const Flat = '♭'
+const Dblsharp = '𝄪'
+const Dblflat = '𝄫'
 
 func ValueOf(s string) (v int) {
 	r := []rune(s)
@@ -26,6 +25,19 @@ func ValueOf(s string) (v int) {
 	case 'G':
 		v = 10
 	}
+	if len(r) == 2 {
+		switch r[1] {
+		case Sharp:
+			v++
+		case Flat:
+			v--
+		case Dblsharp:
+			v += 2
+		case Dblflat:
+			v += 2
+		}
+	}
+	v %= 12
 	return
 }
 
