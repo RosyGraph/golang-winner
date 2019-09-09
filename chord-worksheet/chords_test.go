@@ -32,7 +32,7 @@ func TestValueOf(t *testing.T) {
 
 func TestAscendingInt(t *testing.T) {
 	got := AscendingInt("A", "C")
-	want := 3
+	want := Interval{"Minor", 3}
 
 	if got != want {
 		t.Errorf("got %d want %d", got, want)
@@ -51,6 +51,8 @@ func TestQuality(t *testing.T) {
 		{name: "B Diminished", triad: Triad{"B", "D", "F"}, want: "Diminished"},
 		{name: "F♯ Augmented", triad: Triad{"F♯", "A♯", "C𝄪"}, want: "Augmented"},
 		{name: "Invalid triad", triad: Triad{"A", "B", "C"}, want: "Not a triad"},
+		// TODO: Change intervals to reflect quantity and quality
+		{name: "Invalid triad", triad: Triad{"A", "D♭", "E"}, want: "Not a triad"},
 	}
 
 	for _, c := range tc {

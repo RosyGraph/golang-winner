@@ -1,5 +1,7 @@
 package main
 
+// TODO: Change intervals to reflect quantity and quality
+
 const Sharp = '♯'
 const Flat = '♭'
 const Dblsharp = '𝄪'
@@ -13,6 +15,11 @@ var alphabet = map[rune]int{
 	'E': 7,
 	'F': 8,
 	'G': 10,
+}
+
+type Interval struct {
+	quality  string
+	quantity int
 }
 
 type Triad struct {
@@ -40,15 +47,8 @@ func NoteValueOf(s string) (v int) {
 	return
 }
 
-func AscendingInt(r, i string) int {
-	ival := NoteValueOf(i)
-	rval := NoteValueOf(r)
-
-	if ival < rval {
-		ival += 12
-	}
-
-	return ival - rval
+func AscendingInt(r, i string) Interval {
+	return Interval{}
 }
 
 func Quality(t Triad) string {
