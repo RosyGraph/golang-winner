@@ -1,7 +1,5 @@
 package main
 
-import "fmt"
-
 const Sharp = '♯'
 const Flat = '♭'
 const Dblsharp = '𝄪'
@@ -53,6 +51,19 @@ func AscendingInt(r, i string) int {
 	return ival - rval
 }
 
-func main() {
-	fmt.Printf("%d %d", 'A', 'G')
+func Quality(t Triad) string {
+	third := AscendingInt(t.root, t.third)
+	fifth := AscendingInt(t.root, t.fifth)
+
+	switch {
+	case third == 4 && fifth == 7:
+		return "Major"
+	case third == 3 && fifth == 7:
+		return "Minor"
+	case third == 3 && fifth == 6:
+		return "Diminished"
+	case third == 4 && fifth == 8:
+		return "Augmented"
+	}
+	return "Not a triad"
 }

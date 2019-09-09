@@ -39,12 +39,27 @@ func TestAscendingInt(t *testing.T) {
 	}
 }
 
-/* func TestQuality(t *testing.T) {
-	triad := Triad{"C", "E", "G"}
-	got := Quality(triad)
-	want := "Major"
-
-	if got != want {
-		t.Errorf("got %v want %v", got, want)
+func TestQuality(t *testing.T) {
+	tc := []struct {
+		name  string
+		triad Triad
+		want  string
+	}{
+		{name: "C Major", triad: Triad{"C", "E", "G"}, want: "Major"},
+		{name: "D Major", triad: Triad{"D", "F♯", "A"}, want: "Major"},
+		{name: "D Minor", triad: Triad{"D", "F", "A"}, want: "Minor"},
+		{name: "B Diminished", triad: Triad{"B", "D", "F"}, want: "Diminished"},
+		{name: "F♯ Augmented", triad: Triad{"F♯", "A♯", "C𝄪"}, want: "Augmented"},
+		{name: "Invalid triad", triad: Triad{"A", "B", "C"}, want: "Not a triad"},
 	}
-} */
+
+	for _, c := range tc {
+		t.Run(c.name, func(t *testing.T) {
+			got := Quality(c.triad)
+
+			if got != c.want {
+				t.Errorf("got %s want %s", got, c.want)
+			}
+		})
+	}
+}
