@@ -22,6 +22,25 @@ func TestNoteFromString(t *testing.T) {
 	}
 }
 
+func TestNoteValue(t *testing.T) {
+	t.Run("value of A", func(t *testing.T) {
+		got := NoteValue(Note{"A", Natural})
+		want := 0
+
+		if got != want {
+			t.Errorf("got %d want %d", got, want)
+		}
+	})
+	t.Run("value of A sharp", func(t *testing.T) {
+		got := NoteValue(Note{"A", Sharp})
+		want := 1
+
+		if got != want {
+			t.Errorf("got %d want %d", got, want)
+		}
+	})
+}
+
 func TestAscendingInterval(t *testing.T) {
 	t.Run("major 3rd", func(t *testing.T) {
 		got := AscendingInterval(Note{"A", Natural}, Note{"C", Sharp})
