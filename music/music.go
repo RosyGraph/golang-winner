@@ -96,11 +96,6 @@ func AscendingInterval(r, i Note) Interval {
 			quality = "undefined"
 		}
 	}
-	if quantity == 2 || quantity == 3 || quantity == 6 || quantity == 7 {
-		// TODO: process imperfect quality
-	} else {
-		// TODO: process perfect qualities
-	}
 	return Interval{quality, quantity}
 }
 

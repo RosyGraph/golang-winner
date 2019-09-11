@@ -42,20 +42,28 @@ func TestNoteValue(t *testing.T) {
 }
 
 func TestAscendingInterval(t *testing.T) {
-	t.Run("major 3rd", func(t *testing.T) {
-		got := AscendingInterval(Note{"A", Natural}, Note{"C", Sharp})
-		want := Interval{"major", 3}
+	tc := []struct {
+		name     string
+		root     Note
+		interval Note
+		want     Interval
+	}{
+		{name: "major 3rd",
+			root:     Note{"A", Natural},
+			interval: Note{"C", Sharp},
+			want:     Interval{"major", 3}},
+		{name: "minor 3rd",
+			root:     Note{"A", Natural},
+			interval: Note{"C", Natural},
+			want:     Interval{"minor", 3}},
+	}
+	for _, c := range tc {
+		t.Run(c.name, func(t *testing.T) {
+			got := AscendingInterval(c.root, c.interval)
 
-		if got != want {
-			t.Errorf("got %v want %v", got, want)
-		}
-	})
-	t.Run("minor 3rd", func(t *testing.T) {
-		got := AscendingInterval(Note{"A", Natural}, Note{"C", Natural})
-		want := Interval{"minor", 3}
-
-		if got != want {
-			t.Errorf("got %v want %v", got, want)
-		}
-	})
+			if got != c.want {
+				t.Errorf("got %v want %v", got, c.want)
+			}
+		})
+	}
 }
