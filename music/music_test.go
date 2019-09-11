@@ -1,4 +1,4 @@
-package music
+package main
 
 import "testing"
 
@@ -51,7 +51,7 @@ func TestAscendingInterval(t *testing.T) {
 		}
 	})
 	t.Run("minor 3rd", func(t *testing.T) {
-		got := AscendingInterval(Note{"A", Natural}, Note{"C", Sharp})
+		got := AscendingInterval(Note{"A", Natural}, Note{"C", Natural})
 		want := Interval{"minor", 3}
 
 		if got != want {

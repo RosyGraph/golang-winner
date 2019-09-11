@@ -1,4 +1,6 @@
-package music
+package main
+
+import "fmt"
 
 const Sharp = "♯"
 const Flat = "♭"
@@ -70,29 +72,40 @@ func AscendingInterval(r, i Note) Interval {
 		ival += 8
 	}
 	quantity = ival - rval + 1
+	fmt.Println(quantity)
 	rcval := NoteValue(r)
 	icval := NoteValue(i)
+	if icval < rcval {
+		icval += 12
+	}
 	totalv := icval - rcval
+	fmt.Println(totalv)
 	// "imperfect" qualities
 	switch quantity {
-	case 1:
-	case 2:
-		nil
 	case 3:
-		nil
-	case 4:
-		nil
-	case 5:
-		nil
-	case 6:
-		nil
-	case 7:
-		nil
+		switch totalv {
+		case 2:
+			quality = "diminished"
+		case 3:
+			quality = "minor"
+		case 4:
+			quality = "major"
+		case 5:
+			quality = "augmented"
+		default:
+			quality = "undefined"
+		}
 	}
 	if quantity == 2 || quantity == 3 || quantity == 6 || quantity == 7 {
 		// TODO: process imperfect quality
 	} else {
 		// TODO: process perfect qualities
 	}
-	return Interval{"major", quantity}
+	return Interval{quality, quantity}
+}
+
+func main() {
+	a := Note{"A", Natural}
+	c := Note{"C", Flat}
+	fmt.Println(NoteValue(c) - NoteValue(a))
 }
