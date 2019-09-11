@@ -70,7 +70,25 @@ func AscendingInterval(r, i Note) Interval {
 		ival += 8
 	}
 	quantity = ival - rval + 1
+	rcval := NoteValue(r)
+	icval := NoteValue(i)
+	totalv := icval - rcval
 	// "imperfect" qualities
+	switch quantity {
+	case 1:
+	case 2:
+		nil
+	case 3:
+		nil
+	case 4:
+		nil
+	case 5:
+		nil
+	case 6:
+		nil
+	case 7:
+		nil
+	}
 	if quantity == 2 || quantity == 3 || quantity == 6 || quantity == 7 {
 		// TODO: process imperfect quality
 	} else {
