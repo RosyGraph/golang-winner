@@ -79,6 +79,7 @@ func AscendingInterval(r, i Note) Interval {
 		icval += 12
 	}
 	totalv := icval - rcval
+	// TODO: Refactor these ugly switch cases
 	switch quantity {
 	case 1:
 		switch totalv {
@@ -124,6 +125,30 @@ func AscendingInterval(r, i Note) Interval {
 		case 5:
 			quality = "perfect"
 		case 6:
+			quality = "augmented"
+		default:
+			quality = "undefined"
+		}
+	case 5:
+		switch totalv {
+		case 6:
+			quality = "diminished"
+		case 7:
+			quality = "perfect"
+		case 8:
+			quality = "augmented"
+		default:
+			quality = "undefined"
+		}
+	case 6:
+		switch totalv {
+		case 7:
+			quality = "diminished"
+		case 8:
+			quality = "minor"
+		case 9:
+			quality = "major"
+		case 10:
 			quality = "augmented"
 		default:
 			quality = "undefined"
