@@ -69,7 +69,7 @@ func AscendingInterval(r, i Note) Interval {
 	rval := Alphabet[r.name]
 	ival := Alphabet[i.name]
 	if rval > ival {
-		ival += 8
+		ival += 7
 	}
 	quantity = ival - rval + 1
 	fmt.Println(quantity)
@@ -79,9 +79,31 @@ func AscendingInterval(r, i Note) Interval {
 		icval += 12
 	}
 	totalv := icval - rcval
-	fmt.Println(totalv)
-	// "imperfect" qualities
 	switch quantity {
+	case 1:
+		switch totalv {
+		case 11:
+			quality = "diminished"
+		case 0:
+			quality = "perfect"
+		case 1:
+			quality = "augmented"
+		default:
+			quality = "undefined"
+		}
+	case 2:
+		switch totalv {
+		case 0:
+			quality = "diminished"
+		case 1:
+			quality = "minor"
+		case 2:
+			quality = "major"
+		case 3:
+			quality = "augmented"
+		default:
+			quality = "undefined"
+		}
 	case 3:
 		switch totalv {
 		case 2:
@@ -95,12 +117,36 @@ func AscendingInterval(r, i Note) Interval {
 		default:
 			quality = "undefined"
 		}
+	case 4:
+		switch totalv {
+		case 4:
+			quality = "diminished"
+		case 5:
+			quality = "perfect"
+		case 6:
+			quality = "augmented"
+		default:
+			quality = "undefined"
+		}
+	case 7:
+		switch totalv {
+		case 9:
+			quality = "diminished"
+		case 10:
+			quality = "minor"
+		case 11:
+			quality = "major"
+		case 12:
+			quality = "augmented"
+		default:
+			quality = "undefined"
+		}
 	}
 	return Interval{quality, quantity}
 }
 
 func main() {
-	a := Note{"A", Natural}
-	c := Note{"C", Flat}
-	fmt.Println(NoteValue(c) - NoteValue(a))
+	d := Note{"D", Natural}
+	c := Note{"C", Natural}
+	fmt.Println(NoteValue(c) - NoteValue(d))
 }
