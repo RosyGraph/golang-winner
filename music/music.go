@@ -1,8 +1,7 @@
-package main
+package music
 
 import (
 	"errors"
-	"fmt"
 )
 
 const Sharp = "♯"
@@ -112,10 +111,4 @@ func AscendingInterval(r, i Note) Interval {
 		quality = imperfect[totalv-9]
 	}
 	return Interval{quality, quantity}
-}
-
-func main() {
-	d := Note{"D", Natural}
-	c := Note{"C", Natural}
-	fmt.Println(c.Value() - d.Value())
 }

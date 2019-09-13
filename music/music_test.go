@@ -1,4 +1,4 @@
-package main
+package music
 
 import "testing"
 
@@ -32,45 +32,23 @@ func TestTriadQuality(t *testing.T) {
 	}
 }
 
-func TestNoteFromString(t *testing.T) {
+func TestNoteValue(t *testing.T) {
 	tc := []struct {
 		name string
-		s    string
-		want Note
+		note Note
+		want int
 	}{
-		{name: "A sharp", s: "A" + Sharp, want: Note{"A", Sharp}},
-		{name: "A natural", s: "A", want: Note{"A", Natural}},
+		{name: "A value", note: NoteFromString("A"), want: 0},
+		{name: "A natural value", note: NoteFromString("A" + Natural), want: 0},
+		{name: "A sharp value", note: NoteFromString("A" + Sharp), want: 1},
+		{name: "D flat value", note: NoteFromString("D" + Flat), want: 4},
 	}
 	for _, c := range tc {
-		t.Run(c.name, func(t *testing.T) {
-			got := NoteFromString(c.s)
-
-			if got != c.want {
-				t.Errorf("got %v want %v", got, c.want)
-			}
-		})
+		got := c.note.Value()
+		if got != c.want {
+			t.Errorf("got %d want %d", got, c.want)
+		}
 	}
-}
-
-func TestNoteValue(t *testing.T) {
-	t.Run("value of A", func(t *testing.T) {
-		note := NoteFromString("A")
-		got := note.Value()
-		want := 0
-
-		if got != want {
-			t.Errorf("got %d want %d", got, want)
-		}
-	})
-	t.Run("value of A sharp", func(t *testing.T) {
-		note := NoteFromString("A" + Sharp)
-		got := note.Value()
-		want := 1
-
-		if got != want {
-			t.Errorf("got %d want %d", got, want)
-		}
-	})
 }
 
 func TestAscendingInterval(t *testing.T) {
