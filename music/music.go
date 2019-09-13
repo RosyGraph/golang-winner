@@ -36,6 +36,9 @@ var AccidentalValues = map[string]int{
 	"♮": 0,
 }
 
+var imperfect = []string{"diminished", "minor", "major", "augmented"}
+var perfect = []string{"diminished", "perfect", "augmented"}
+
 type Note struct {
 	name       string
 	accidental string
@@ -93,79 +96,17 @@ func AscendingInterval(r, i Note) Interval {
 			quality = "undefined"
 		}
 	case 2:
-		switch totalv {
-		case 0:
-			quality = "diminished"
-		case 1:
-			quality = "minor"
-		case 2:
-			quality = "major"
-		case 3:
-			quality = "augmented"
-		default:
-			quality = "undefined"
-		}
+		quality = imperfect[totalv]
 	case 3:
-		switch totalv {
-		case 2:
-			quality = "diminished"
-		case 3:
-			quality = "minor"
-		case 4:
-			quality = "major"
-		case 5:
-			quality = "augmented"
-		default:
-			quality = "undefined"
-		}
+		quality = imperfect[totalv-2]
 	case 4:
-		switch totalv {
-		case 4:
-			quality = "diminished"
-		case 5:
-			quality = "perfect"
-		case 6:
-			quality = "augmented"
-		default:
-			quality = "undefined"
-		}
+		quality = perfect[totalv-4]
 	case 5:
-		switch totalv {
-		case 6:
-			quality = "diminished"
-		case 7:
-			quality = "perfect"
-		case 8:
-			quality = "augmented"
-		default:
-			quality = "undefined"
-		}
+		quality = perfect[totalv-6]
 	case 6:
-		switch totalv {
-		case 7:
-			quality = "diminished"
-		case 8:
-			quality = "minor"
-		case 9:
-			quality = "major"
-		case 10:
-			quality = "augmented"
-		default:
-			quality = "undefined"
-		}
+		quality = imperfect[totalv-7]
 	case 7:
-		switch totalv {
-		case 9:
-			quality = "diminished"
-		case 10:
-			quality = "minor"
-		case 11:
-			quality = "major"
-		case 12:
-			quality = "augmented"
-		default:
-			quality = "undefined"
-		}
+		quality = imperfect[totalv-9]
 	}
 	return Interval{quality, quantity}
 }

@@ -92,6 +92,10 @@ func TestAscendingInterval(t *testing.T) {
 			root:     Note{"D", Natural},
 			interval: Note{"C", Natural},
 			want:     Interval{"minor", 7}},
+		{name: "major 7th",
+			root:     Note{"C", Natural},
+			interval: Note{"B", Natural},
+			want:     Interval{"major", 7}},
 	}
 	for _, c := range tc {
 		t.Run(c.name, func(t *testing.T) {
