@@ -2,6 +2,36 @@ package main
 
 import "testing"
 
+func TestTriadQuality(t *testing.T) {
+	tc := []struct {
+		name  string
+		triad Triad
+		want  string
+	}{
+		{
+			name:  "C major",
+			triad: Triad{NoteFromString("C"), NoteFromString("E"), NoteFromString("G")},
+			want:  "major",
+		},
+		{
+			name:  "A minor",
+			triad: Triad{NoteFromString("A"), NoteFromString("C"), NoteFromString("E")},
+			want:  "minor",
+		},
+		{
+			name:  "B diminished",
+			triad: Triad{NoteFromString("B"), NoteFromString("D"), NoteFromString("F")},
+			want:  "diminished",
+		},
+	}
+	for _, c := range tc {
+		got := c.triad.Quality()
+		if got != c.want {
+			t.Errorf("got %v want %v", got, c.want)
+		}
+	}
+}
+
 func TestNoteFromString(t *testing.T) {
 	tc := []struct {
 		name string
@@ -24,7 +54,8 @@ func TestNoteFromString(t *testing.T) {
 
 func TestNoteValue(t *testing.T) {
 	t.Run("value of A", func(t *testing.T) {
-		got := NoteValue(Note{"A", Natural})
+		note := NoteFromString("A")
+		got := note.Value()
 		want := 0
 
 		if got != want {
@@ -32,7 +63,8 @@ func TestNoteValue(t *testing.T) {
 		}
 	})
 	t.Run("value of A sharp", func(t *testing.T) {
-		got := NoteValue(Note{"A", Sharp})
+		note := NoteFromString("A" + Sharp)
+		got := note.Value()
 		want := 1
 
 		if got != want {

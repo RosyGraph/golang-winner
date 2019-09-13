@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"errors"
+	"fmt"
+)
 
 const Sharp = "♯"
 const Flat = "♭"
@@ -9,35 +12,36 @@ const Dblflat = "𝄫"
 const Natural = "♮"
 
 var NoteValues = map[string]int{
-	"A": 0,
-	"B": 2,
-	"C": 3,
-	"D": 5,
-	"E": 7,
-	"F": 8,
-	"G": 10,
-}
+	"A": 0, "B": 2, "C": 3, "D": 5, "E": 7, "F": 8, "G": 10}
 
 var Alphabet = map[string]int{
-	"A": 0,
-	"B": 1,
-	"C": 2,
-	"D": 3,
-	"E": 4,
-	"F": 5,
-	"G": 6,
-}
+	"A": 0, "B": 1, "C": 2, "D": 3, "E": 4, "F": 5, "G": 6}
 
-var AccidentalValues = map[string]int{
-	"♯": 1,
-	"♭": -1,
-	"𝄪": 2,
-	"𝄫": -2,
-	"♮": 0,
-}
+var AccidentalValues = map[string]int{"♯": 1, "♭": -1, "𝄪": 2, "𝄫": -2, "♮": 0}
 
 var imperfect = []string{"diminished", "minor", "major", "augmented"}
 var perfect = []string{"diminished", "perfect", "augmented"}
+
+type Triad struct {
+	root  Note
+	third Note
+	fifth Note
+}
+
+func (t Triad) Quality() string {
+	third := AscendingInterval(t.root, t.third)
+	fifth := AscendingInterval(t.root, t.fifth)
+	if fifth.quantity != 5 || third.quantity != 3 {
+		errors.New("Chord contains incorrect quantity.")
+	}
+	if fifth.quality == "perfect" {
+		return third.quality
+	}
+	if fifth.quality == "diminished" && third.quality == "minor" {
+		return "diminished"
+	}
+	return ""
+}
 
 type Note struct {
 	name       string
@@ -57,7 +61,7 @@ func NoteFromString(s string) Note {
 	return Note{name, accidental}
 }
 
-func NoteValue(n Note) int {
+func (n Note) Value() int {
 	return (NoteValues[n.name] + AccidentalValues[n.accidental]) % 12
 }
 
@@ -75,14 +79,13 @@ func AscendingInterval(r, i Note) Interval {
 		ival += 7
 	}
 	quantity = ival - rval + 1
-	fmt.Println(quantity)
-	rcval := NoteValue(r)
-	icval := NoteValue(i)
+	rcval := r.Value()
+	icval := i.Value()
 	if icval < rcval {
 		icval += 12
 	}
 	totalv := icval - rcval
-	// TODO: Refactor these ugly switch cases
+	// TODO: Refactor case 1
 	switch quantity {
 	case 1:
 		switch totalv {
@@ -114,5 +117,5 @@ func AscendingInterval(r, i Note) Interval {
 func main() {
 	d := Note{"D", Natural}
 	c := Note{"C", Natural}
-	fmt.Println(NoteValue(c) - NoteValue(d))
+	fmt.Println(c.Value() - d.Value())
 }
