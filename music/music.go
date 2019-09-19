@@ -87,18 +87,12 @@ func AscendingInterval(r, i Note) Interval {
 		icval += 12
 	}
 	totalv := icval - rcval
-	// TODO: Refactor case 1
 	switch quantity {
 	case 1:
-		switch totalv {
-		case 11:
+		if totalv == 11 {
 			quality = "diminished"
-		case 0:
-			quality = "perfect"
-		case 1:
-			quality = "augmented"
-		default:
-			quality = "undefined"
+		} else {
+			quality = perfect[totalv+1]
 		}
 	case 2:
 		quality = imperfect[totalv]
