@@ -39,6 +39,9 @@ func (t Triad) Quality() string {
 	if fifth.quality == "diminished" && third.quality == "minor" {
 		return "diminished"
 	}
+	if fifth.quality == "augmented" && third.quality == "major" {
+		return "augmented"
+	}
 	return ""
 }
 

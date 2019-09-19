@@ -23,6 +23,11 @@ func TestTriadQuality(t *testing.T) {
 			triad: Triad{NoteFromString("B"), NoteFromString("D"), NoteFromString("F")},
 			want:  "diminished",
 		},
+		{
+			name:  "G sharp augmented",
+			triad: Triad{NoteFromString("G" + Sharp), NoteFromString("B" + Sharp), NoteFromString("D" + Dblsharp)},
+			want:  "augmented",
+		},
 	}
 	for _, c := range tc {
 		got := c.triad.Quality()
