@@ -2,6 +2,8 @@ package music
 
 import (
 	"errors"
+	"fmt"
+	"io"
 )
 
 const Sharp = "♯"
@@ -108,4 +110,8 @@ func AscendingInterval(r, i Note) Interval {
 		quality = imperfect[totalv-9]
 	}
 	return Interval{quality, quantity}
+}
+
+func IntervalTest(w io.Writer) {
+	fmt.Fprintf(w, "Identify the interval C to E\n")
 }

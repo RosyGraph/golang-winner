@@ -1,6 +1,20 @@
 package music
 
-import "testing"
+import (
+	"bytes"
+	"testing"
+)
+
+func TestIntervalTest(t *testing.T) {
+	buffer := bytes.Buffer{}
+	IntervalTest(&buffer)
+	got := buffer.String()
+	want := "Identify the interval C to E\n"
+
+	if got != want {
+		t.Errorf("got %v want %v", got, want)
+	}
+}
 
 func TestTriadQuality(t *testing.T) {
 	tc := []struct {
@@ -24,9 +38,10 @@ func TestTriadQuality(t *testing.T) {
 			want:  "diminished",
 		},
 		{
-			name:  "G sharp augmented",
-			triad: Triad{NoteFromString("G" + Sharp), NoteFromString("B" + Sharp), NoteFromString("D" + Dblsharp)},
-			want:  "augmented",
+			name: "G sharp augmented",
+			triad: Triad{NoteFromString("G" + Sharp), NoteFromString("B" + Sharp),
+				NoteFromString("D" + Dblsharp)},
+			want: "augmented",
 		},
 	}
 	for _, c := range tc {
