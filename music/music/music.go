@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"strings"
 )
 
 const Sharp = "♯"
@@ -27,6 +28,20 @@ type Triad struct {
 	root  Note
 	third Note
 	fifth Note
+}
+
+func (t Triad) Equals(c Triad) bool {
+	return t.root == c.root &&
+		t.third == c.third &&
+		t.fifth == c.fifth
+}
+
+func TriadFromString(s string) Triad {
+	arr := strings.Split(s, " ")
+	root := NoteFromString(arr[0])
+	third := NoteFromString(arr[1])
+	fifth := NoteFromString(arr[2])
+	return Triad{root, third, fifth}
 }
 
 func (t Triad) Quality() string {

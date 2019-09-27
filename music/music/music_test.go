@@ -2,8 +2,21 @@ package music
 
 import (
 	"bytes"
+	"reflect"
 	"testing"
 )
+
+func TestTriadEquals(t *testing.T) {
+	t.Run("No sharps or flats", func(t *testing.T) {
+		triad := TriadFromString("A C E")
+		got := triad.Equals(TriadFromString("A C E"))
+		want := true
+
+		if got != want {
+			t.Errorf("got %v want %v", got, want)
+		}
+	})
+}
 
 func TestIntervalTest(t *testing.T) {
 	buffer := bytes.Buffer{}
@@ -12,6 +25,15 @@ func TestIntervalTest(t *testing.T) {
 	want := "Identify the interval C to E\n"
 
 	if got != want {
+		t.Errorf("got %v want %v", got, want)
+	}
+}
+
+func TestTriadFromString(t *testing.T) {
+	got := TriadFromString("A C E")
+	want := Triad{NoteFromString("A"), NoteFromString("C"), NoteFromString("E")}
+
+	if !reflect.DeepEqual(got, want) {
 		t.Errorf("got %v want %v", got, want)
 	}
 }
