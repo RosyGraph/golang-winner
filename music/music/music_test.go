@@ -7,15 +7,28 @@ import (
 )
 
 func TestTriadEquals(t *testing.T) {
-	t.Run("No sharps or flats", func(t *testing.T) {
-		triad := TriadFromString("A C E")
-		got := triad.Equals(TriadFromString("A C E"))
-		want := true
+	tc := []struct {
+		name   string
+		triad  Triad
+		equals Triad
+		want   bool
+	}{
+		{name: "A minor = A minor", triad: TriadFromString("A C E"),
+			equals: TriadFromString("A C E"), want: true},
+		{name: "C major != A minor", triad: TriadFromString("C E G"),
+			equals: TriadFromString("A C E"), want: false},
+		{name: "C minor = C minor", triad: TriadFromString("C Eb G"),
+			equals: TriadFromString("C Eb G"), want: true},
+	}
 
-		if got != want {
-			t.Errorf("got %v want %v", got, want)
-		}
-	})
+	for _, c := range tc {
+		t.Run(c.name, func(t *testing.T) {
+			got := c.triad.Equals(c.equals)
+			if got != c.want {
+				t.Errorf("got %v want %v", got, c.want)
+			}
+		})
+	}
 }
 
 func TestIntervalTest(t *testing.T) {
