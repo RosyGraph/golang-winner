@@ -1,3 +1,6 @@
+// Range iterates over elements in a variety of data
+// structures. Let's see how using range with some of the
+// data structures we've already learned.
 package main
 
 import "fmt"

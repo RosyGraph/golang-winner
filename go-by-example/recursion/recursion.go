@@ -1,3 +1,5 @@
+// Go supports recursive functions. Here's a classic factorial
+// example.
 package main
 
 import "fmt"
