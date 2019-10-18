@@ -35,7 +35,7 @@ func New(values ...float64) *Hashset {
 
 func main() {
 	h := sherlocksquares.New()
-	for i := 0; i < 10000; i++ {
+	for i := 0; i < 1000; i++ {
 		h.Add(math.Pow(float64(i), 2))
 	}
 	fmt.Printf("%#v\n", h)

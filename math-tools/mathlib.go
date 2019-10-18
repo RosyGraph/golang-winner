@@ -8,7 +8,8 @@ import (
 const pi float64 = math.Pi
 
 func main() {
-	primes(100)
+	n, m := simplify(170, 360)
+	fmt.Println(n, m)
 }
 
 func primes(x int) {
