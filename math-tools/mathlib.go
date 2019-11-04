@@ -8,8 +8,13 @@ import (
 const pi float64 = math.Pi
 
 func main() {
-	n, m := simplify(170, 360)
-	fmt.Println(n, m)
+	a := math.Sqrt(18*18 + 100 - 2*18*10*cos(81))
+	fmt.Println(heron(a, 13, 18))
+}
+
+func heron(a, b, c float64) float64 {
+	s := (a + b + c) / 2
+	return math.Sqrt(s * (s - a) * (s - b) * (s - c))
 }
 
 func primes(x int) {
