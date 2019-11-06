@@ -1,5 +1,0 @@
-= Topics =
-	* [[Introduction to Arguments]]
-	* [[Cosmology]]
-	* [[Perception]]
-
