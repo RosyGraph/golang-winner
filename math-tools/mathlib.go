@@ -8,8 +8,8 @@ import (
 const pi float64 = math.Pi
 
 func main() {
-	a := math.Sqrt(18*18 + 100 - 2*18*10*cos(81))
-	fmt.Println(heron(a, 13, 18))
+	a, b := simplify(16, 169)
+	fmt.Println(a, b)
 }
 
 func heron(a, b, c float64) float64 {
