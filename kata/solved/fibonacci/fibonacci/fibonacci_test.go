@@ -1,4 +1,4 @@
-package kata_fibonacci
+package fibonacci
 
 import "testing"
 

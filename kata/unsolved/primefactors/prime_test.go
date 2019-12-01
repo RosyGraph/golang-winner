@@ -12,6 +12,8 @@ func TestPrimeCount(t *testing.T) {
 	tc := []TestCase{
 		{name: "1", n: 1, want: 0},
 		{name: "2", n: 2, want: 1},
+		{name: "3", n: 3, want: 1},
+		{name: "500", n: 500, want: 4},
 	}
 
 	check := func(t *testing.T, c TestCase) {
