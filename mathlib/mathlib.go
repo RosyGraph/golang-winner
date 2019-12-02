@@ -1,4 +1,4 @@
-package main
+package mathlib
 
 import (
 	"fmt"
@@ -7,29 +7,24 @@ import (
 
 const pi float64 = math.Pi
 
-func main() {
-	a, b := simplify(16, 169)
-	fmt.Println(a, b)
-}
-
 func heron(a, b, c float64) float64 {
 	s := (a + b + c) / 2
 	return math.Sqrt(s * (s - a) * (s - b) * (s - c))
 }
 
 func primes(x int) {
-	flag := true
+	f := true
 	for i := 2; i < x; i++ {
 		for j := 2; j < i; j++ {
 			if i%j == 0 {
-				flag = false
+				f = false
 				break
 			}
 		}
-		if flag {
+		if f {
 			fmt.Println(i)
 		}
-		flag = true
+		f = true
 	}
 }
 
@@ -38,15 +33,15 @@ func h(t float64) float64 {
 }
 
 func pytID(n, d int) (int, int) {
-	return simplify(d*d-n*n, d*d)
+	return Simplify(d*d-n*n, d*d)
 }
 
-func simplify(n, d int) (int, int) {
+func Simplify(n, d int) (int, int) {
 	m := lcd(n, d)
 	if m == -1 {
 		return n, d
 	}
-	return simplify(n/m, d/m)
+	return Simplify(n/m, d/m)
 }
 
 func multiples(x int) []int {
