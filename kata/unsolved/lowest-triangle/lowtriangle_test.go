@@ -3,10 +3,21 @@ package main
 import "testing"
 
 func TestLowestTriangle(t *testing.T) {
-	got := lowestTriangle(2, 2)
-	want := 2
+	tc := []struct {
+		name string
+		b, a int
+		want int
+	}{
+		{name: "2 2", b: 2, a: 2, want: 2},
+	}
 
-	if got != want {
-		t.Errorf("got %d want %d", got, want)
+	for _, c := range tc {
+		t.Run(c.name, func(t *testing.T) {
+			got := lowestTriangle(c.b, c.a)
+
+			if got != c.want {
+				t.Errorf("got %d want %d", got, c.want)
+			}
+		})
 	}
 }
