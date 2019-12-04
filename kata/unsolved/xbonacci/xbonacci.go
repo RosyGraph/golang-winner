@@ -1,16 +1,21 @@
 package xbonacci
 
 func Xbonacci(num, index int) int {
-	arr := new([]int)
+	if index <= num {
+		return 1
+	}
+
+	arr := make([]int, index)
 	for i := 0; i < num; i++ {
-		*arr = append(*arr, 1)
+		arr[i] = 1
 	}
 
-	a := 1
-
-	for i := 0; i < index-num; i++ {
+	for i := num; i < index; i++ {
+		for j := i - num; j < num; j++ {
+			arr[i] += arr[j]
+		}
 	}
-	return a
+	return arr[index-1]
 }
 
 func sum(arr []int) (s int) {

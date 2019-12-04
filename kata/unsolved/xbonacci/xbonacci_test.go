@@ -19,7 +19,7 @@ func TestXbonacci(t *testing.T) {
 			got := Xbonacci(c.n, c.i)
 
 			if got != c.want {
-				t.Errorf("got %d want %d", got, c.want)
+				t.Errorf("%s: got %d want %d", c.name, got, c.want)
 			}
 		})
 	}

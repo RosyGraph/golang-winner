@@ -6,5 +6,13 @@
 package main
 
 func closedIsland(grid [][]int) int {
-	return 0
+	var c int
+	for i := 0; i < len(grid); i++ {
+		for j := 0; j < len(grid[0]); j++ {
+			if grid[i][j] == 0 {
+				c++
+			}
+		}
+	}
+	return c
 }

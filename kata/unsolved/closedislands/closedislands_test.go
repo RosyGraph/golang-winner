@@ -46,7 +46,7 @@ func TestClosedIsland(t *testing.T) {
 		t.Run(c.name, func(t *testing.T) {
 			got := closedIsland(c.grid)
 			if got != c.want {
-				t.Errorf("got %d want %d", got, c.want)
+				t.Errorf("%s: got %d want %d", c.name, got, c.want)
 			}
 		})
 	}
