@@ -9,6 +9,7 @@ func TestLowestTriangle(t *testing.T) {
 		want int
 	}{
 		{name: "2 2", b: 2, a: 2, want: 2},
+		{name: "2 3", b: 2, a: 3, want: 3},
 	}
 
 	for _, c := range tc {
