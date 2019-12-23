@@ -4,17 +4,16 @@ func bestDivisor(n int32) int32 {
 	var max int32
 	var ans int32
 	for i := int32(1); i < n+1; i++ {
-		ans = 0
-		if i < 10 {
-			if i > max {
-				max = i
-				continue
+		if n%i == 0 {
+			digits := digitSum(i)
+			if digits > max {
+				max = digits
+				ans = i
+			} else if digits == max {
+				if i < ans {
+					ans = i
+				}
 			}
-		}
-		temp := i
-		for temp > 9 {
-			ans += temp % 10
-			temp /= 10
 		}
 	}
 	return ans
