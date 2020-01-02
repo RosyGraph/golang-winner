@@ -9,12 +9,13 @@ import (
 )
 
 type Case struct {
-	Lo   int32
-	Hi   int32
-	Want int32
+	lo   int32
+	hi   int32
+	want int32
 }
 
-func NewCase(str string) (c Case) {
+func NewCase(str string) []int32 {
+	c := make([]int32, 3)
 	parseField := func(s string) int32 {
 		p, err := strconv.Atoi(s)
 		if err != nil {
@@ -25,14 +26,14 @@ func NewCase(str string) (c Case) {
 
 	f := strings.Fields(str)
 
-	c.Lo = parseField(f[0])
-	c.Hi = parseField(f[1])
-	c.Want = parseField(f[2])
+	for i, v := range f {
+		c[i] = parseField(v)
+	}
 
 	return c
 }
 
-func MakeCases() []Case {
+func MakeCases() [][]int32 {
 	readfile := func(s string) *bufio.Scanner {
 		f, err := os.Open(s)
 		if err != nil {
@@ -46,7 +47,7 @@ func MakeCases() []Case {
 	s2 := readfile("testcases/solutions.txt")
 
 	i := 0
-	var tc []Case
+	var tc [][]int32
 	for s1.Scan() {
 		s2.Scan()
 		s := fmt.Sprintf("%s %s", s1.Text(), s2.Text())
