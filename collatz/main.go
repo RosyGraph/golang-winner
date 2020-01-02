@@ -22,7 +22,7 @@ func collatz(n int) int {
 
 func main() {
 	n, _ := strconv.Atoi(os.Args[1])
-	for i := 0; i < n; i++ {
+	for i := 0; i < n+1; i++ {
 		fmt.Printf("%d: %d steps\n", i, collatz(i))
 	}
 }
