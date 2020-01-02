@@ -84,30 +84,16 @@ func rads(x float64) float64 {
 	return x * y
 }
 
-func sin(x float64) float64 {
-	return math.Sin(rads(x))
-}
+func sin(x float64) float64 { return math.Sin(rads(x)) }
 
-func cos(x float64) float64 {
-	return math.Cos(rads(x))
-}
+func cos(x float64) float64 { return math.Cos(rads(x)) }
 
-func tan(x float64) float64 {
-	return math.Tan(rads(x))
-}
+func tan(x float64) float64 { return math.Tan(rads(x)) }
 
-func asin(x float64) float64 {
-	return degrees(math.Asin(x))
-}
+func asin(x float64) float64 { return degrees(math.Asin(x)) }
 
-func acos(x float64) float64 {
-	return degrees(math.Acos(x))
-}
+func acos(x float64) float64 { return degrees(math.Acos(x)) }
 
-func atan(x float64) float64 {
-	return degrees(math.Atan(x))
-}
+func atan(x float64) float64 { return degrees(math.Atan(x)) }
 
-func average(x, y float64) float64 {
-	return (x + y) / 2.
-}
+func average(x, y float64) float64 { return (x + y) / 2. }
