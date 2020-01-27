@@ -1,4 +1,4 @@
-// Dup rpints the text of each line that appears more than
+// Dup prints the text of each line that appears more than
 // once in the standard input, preceded by its count.
 package main
 
