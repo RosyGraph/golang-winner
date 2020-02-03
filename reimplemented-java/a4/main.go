@@ -55,8 +55,9 @@ func MinIntTwoStr(s1, s2 string) int {
 	return min
 }
 
-// Curve the numbers in a space-separated String so the highest number is 100 and
-// the difference between the highest number and 100 is added to each other number
+// Curve the numbers in a space-separated String so the highest number is 100
+// and the difference between the highest number and 100 is added to each other
+// number
 func CurveScores(s string) string {
 	sc := wordScanner(s)
 	sc.Scan()
@@ -76,7 +77,6 @@ func CurveScores(s string) string {
 	for sc.Scan() {
 		current, _ := strconv.Atoi(sc.Text())
 		current += k
-
 		curved += strconv.FormatInt(int64(current), 10) + " "
 	}
 
