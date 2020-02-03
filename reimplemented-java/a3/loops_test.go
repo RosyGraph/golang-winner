@@ -1,4 +1,4 @@
-package main
+package a3
 
 import "testing"
 

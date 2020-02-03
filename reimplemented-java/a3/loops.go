@@ -1,8 +1,7 @@
-package main
+package a3
 
 import (
 	"bufio"
-	"fmt"
 	"strconv"
 	"strings"
 )
@@ -10,22 +9,23 @@ import (
 // Returns a copy of the input string with each 'a' character censored.
 func CensorA(s string) string {
 	res := ""
+
 	for _, c := range s {
 		if c == 'a' || c == 'A' {
 			c = '*'
 		}
 		res += string(c)
 	}
+
 	return res
 }
 
 // Returns true if there are more even numbers in the string than odd.
 func ContainsMoreEvens(s string) bool {
 	// NOTE: 0 is an even number
-	sc := wordScanner(s)
 	var evens int
 
-	for sc.Scan() {
+	for sc := wordScanner(s); sc.Scan(); {
 		token := sc.Text()
 		n, err := strconv.Atoi(token)
 
@@ -63,8 +63,4 @@ func wordScanner(s string) *bufio.Scanner {
 	sc.Split(bufio.ScanWords)
 
 	return sc
-}
-
-func main() {
-	fmt.Println("vim-go")
 }
