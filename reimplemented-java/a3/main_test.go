@@ -64,3 +64,29 @@ func TestContainsMoreEvens(t *testing.T) {
 		})
 	}
 }
+
+func TestTriangleString(t *testing.T) {
+	tc := []struct {
+		n    int
+		want string
+	}{
+		{
+			n:    3,
+			want: "*\n**\n***",
+		},
+		{
+			n:    1,
+			want: "*",
+		},
+	}
+
+	for _, c := range tc {
+		t.Run(c.want, func(t *testing.T) {
+			got := TriangleString(c.n)
+
+			if got != c.want {
+				t.Errorf("TriangleString(%d):\ngot:\n%s\nwant:\n%s", c.n, got, c.want)
+			}
+		})
+	}
+}

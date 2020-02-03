@@ -43,6 +43,20 @@ func ContainsMoreEvens(s string) bool {
 	return evens > 0
 }
 
+// Returns a string resembling a triangle with height and width = n
+func TriangleString(n int) string {
+	res := ""
+
+	for row := 0; row < n; row++ {
+		for col := 0; col < row+1; col++ {
+			res += "*"
+		}
+		res += "\n"
+	}
+
+	return res[:len(res)-1]
+}
+
 // Returns a scanner with Split set to ScanWords
 func wordScanner(s string) *bufio.Scanner {
 	sc := bufio.NewScanner(strings.NewReader(s))
