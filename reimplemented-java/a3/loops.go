@@ -57,6 +57,17 @@ func TriangleString(n int) string {
 	return res[:len(res)-1]
 }
 
+// Returns a color safe value between 0 and 255
+func SafeColor(n int) int {
+	switch {
+	case n < 0:
+		return 0
+	case n > 255:
+		return 255
+	}
+	return n
+}
+
 // Returns a scanner with Split set to ScanWords
 func wordScanner(s string) *bufio.Scanner {
 	sc := bufio.NewScanner(strings.NewReader(s))

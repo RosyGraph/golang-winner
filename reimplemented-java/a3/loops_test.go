@@ -90,3 +90,24 @@ func TestTriangleString(t *testing.T) {
 		})
 	}
 }
+
+func TestSafeColor(t *testing.T) {
+	tc := []struct {
+		n    int
+		want int
+	}{
+		{n: 288, want: 255},
+		{n: -8, want: 0},
+		{n: 20, want: 20},
+	}
+
+	for _, c := range tc {
+		t.Run("SafeColor", func(t *testing.T) {
+			got := SafeColor(c.n)
+
+			if got != c.want {
+				t.Errorf("SafeColor(%d): got %d want %d", c.n, got, c.want)
+			}
+		})
+	}
+}
