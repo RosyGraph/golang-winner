@@ -40,24 +40,23 @@ func main() {
 		panic(err)
 	}
 
-	if f, err = parseFilterArg(flagFilter); err != nil {
+	if f, err = parseFilterArg(*flagFilter); err != nil {
 		panic(err)
 	}
 
-	if w, err = parseOutArg(flagOut); err != nil {
+	if w, err = parseOutArg(*flagOut); err != nil {
 		panic(err)
 	}
 
 	modify(w, m, f)
 }
 
-// TODO: comment
-func parseOutArg(s *string) (io.Writer, error) {
+func parseOutArg(s string) (io.Writer, error) {
 	var w io.Writer
-	if *s == "" {
+	if s == "" {
 		w = os.Stdout
 	} else {
-		file, err := os.Create(*s)
+		file, err := os.Create(s)
 		if err != nil {
 			return nil, err
 		}
@@ -68,7 +67,7 @@ func parseOutArg(s *string) (io.Writer, error) {
 }
 
 // Parse the input string pointer into a filter option
-func parseFilterArg(s *string) (filter.Filter, error) {
+func parseFilterArg(s string) (filter.Filter, error) {
 	brighten := func(c color.Color) color.Color {
 		return filter.Brighten(c, 2)
 	}
@@ -80,7 +79,7 @@ func parseFilterArg(s *string) (filter.Filter, error) {
 		"invert":    filter.Invert,
 		"i":         filter.Invert,
 	}
-	f, ok := filters[*s]
+	f, ok := filters[s]
 	if !ok {
 		return nil, errors.InvalidArgumentError(
 			"Usage: -f [b|brighten|g|grayscale|i|invert]")
