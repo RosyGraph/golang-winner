@@ -23,7 +23,6 @@ import (
 )
 
 func main() {
-	// TODO: add gif/png functionality
 	var (
 		flagIn     = flag.String("in", "", "Input filename")
 		flagFilter = flag.String("f", "", "Filter name")
@@ -33,24 +32,20 @@ func main() {
 		w          io.Writer
 		err        error
 	)
-
 	flag.Parse()
-
 	if m, err = decodeJPEG(*flagIn); err != nil {
 		panic(err)
 	}
-
 	if f, err = parseFilterArg(*flagFilter); err != nil {
 		panic(err)
 	}
-
 	if w, err = parseOutArg(*flagOut); err != nil {
 		panic(err)
 	}
-
 	modify(w, m, f)
 }
 
+// Parse the out file argument. Defaults to stdout writer.
 func parseOutArg(s string) (io.Writer, error) {
 	var w io.Writer
 	if s == "" {
@@ -66,7 +61,7 @@ func parseOutArg(s string) (io.Writer, error) {
 	return w, nil
 }
 
-// Parse the input string pointer into a filter option
+// Parse the input string pointer into a filter option.
 func parseFilterArg(s string) (filter.Filter, error) {
 	brighten := func(c color.Color) color.Color {
 		return filter.Brighten(c, 2)
@@ -87,11 +82,10 @@ func parseFilterArg(s string) (filter.Filter, error) {
 	return f, nil
 }
 
-// Return a copy of the image modified by the input filter
+// Return a copy of the image modified by the input filter.
 func modify(writer io.Writer, m image.Image, f filter.Filter) {
 	bounds := m.Bounds()
 	img := image.NewRGBA(bounds)
-
 	for y := bounds.Min.Y; y < bounds.Max.Y; y++ {
 		for x := bounds.Min.X; x < bounds.Max.X; x++ {
 			c := m.At(x, y)
@@ -102,12 +96,12 @@ func modify(writer io.Writer, m image.Image, f filter.Filter) {
 	}
 	var opt jpeg.Options
 	opt.Quality = 100
-
 	jpeg.Encode(writer, img, &opt)
 }
 
-// Returns a JPEG as an Image
+// Returns a JPEG as an Image.
 func decodeJPEG(f string) (image.Image, error) {
+	// TODO: check file type and make the appropriate Image
 	r, err := os.Open(f)
 	if err != nil {
 		return nil, err
