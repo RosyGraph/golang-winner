@@ -20,11 +20,26 @@ import (
 func main() {
 	// TODO: add flag functionality
 	img := decodeJPEG("resources/Arches.jpg")
-	reverse(os.Stdout, img)
+	// reverse(os.Stdout, img)
+	grayscale(os.Stdout, img)
 }
 
 func grayscale(writer io.Writer, m image.Image) {
-	// TODO: implement
+	bounds := m.Bounds()
+	img := image.NewRGBA(bounds)
+
+	for y := bounds.Min.Y; y < bounds.Max.Y; y++ {
+		for x := bounds.Min.X; x < bounds.Max.X; x++ {
+			c := m.At(x, y)
+
+			gray := color.Gray16Model.Convert(c)
+			img.Set(x, y, gray)
+		}
+	}
+	var opt jpeg.Options
+
+	opt.Quality = 100
+	jpeg.Encode(writer, img, &opt)
 }
 
 func invertColor(c color.Color) color.Color {
