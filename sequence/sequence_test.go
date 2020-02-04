@@ -28,7 +28,7 @@ func TestNthArithmetic(t *testing.T) {
 	}
 }
 
-// 2, 4
+// 2, 4, 8
 func TestNthGeometric(t *testing.T) {
 	tc := []struct {
 		n    int
@@ -37,6 +37,7 @@ func TestNthGeometric(t *testing.T) {
 		want int
 	}{
 		{n: 2, n1: 2, r: 2, want: 4},
+		{n: 3, n1: 2, r: 2, want: 8},
 	}
 
 	for _, c := range tc {
@@ -48,10 +49,5 @@ func TestNthGeometric(t *testing.T) {
 					c.n, c.n1, c.r, got, c.want)
 			}
 		})
-	}
-	got := NthGeometric(2, 2, 2)
-	want := 4
-
-	if got != want {
 	}
 }
