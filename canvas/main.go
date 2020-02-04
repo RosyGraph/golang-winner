@@ -7,7 +7,6 @@ package main
 import (
 	"bufio"
 	"flag"
-	"fmt"
 	"image"
 	"io"
 	"os"
@@ -20,6 +19,7 @@ import (
 	_ "image/jpeg"
 
 	"github.com/RosyGraph/canvas/filter"
+	"golang.org/x/crypto/openpgp/errors"
 )
 
 func main() {
@@ -28,19 +28,47 @@ func main() {
 		flagIn     = flag.String("in", "", "Input filename")
 		flagFilter = flag.String("f", "", "Filter name")
 		flagOut    = flag.String("out", "", "Output filename")
-		img        image.Image
+		f          filter.Filter
+		m          image.Image
+		w          io.Writer
 		err        error
-		writer     io.Writer
 	)
 
 	flag.Parse()
 
-	img, err = decodeJPEG(*flagIn)
-	if err != nil {
-		fmt.Println("Invalid filename")
+	if m, err = decodeJPEG(*flagIn); err != nil {
+		panic(err)
 	}
 
-	// TODO: refactor into parseFilterArg
+	if f, err = parseFilterArg(flagFilter); err != nil {
+		panic(err)
+	}
+
+	if w, err = parseOutArg(flagOut); err != nil {
+		panic(err)
+	}
+
+	modify(w, m, f)
+}
+
+// TODO: comment
+func parseOutArg(s *string) (io.Writer, error) {
+	var w io.Writer
+	if *s == "" {
+		w = os.Stdout
+	} else {
+		file, err := os.Create(*s)
+		if err != nil {
+			return nil, err
+		}
+		defer file.Close()
+		w = bufio.NewWriter(file)
+	}
+	return w, nil
+}
+
+// Parse the input string pointer into a filter option
+func parseFilterArg(s *string) (filter.Filter, error) {
 	brighten := func(c color.Color) color.Color {
 		return filter.Brighten(c, 2)
 	}
@@ -52,27 +80,12 @@ func main() {
 		"invert":    filter.Invert,
 		"i":         filter.Invert,
 	}
-
-	f, ok := filters[*flagFilter]
+	f, ok := filters[*s]
 	if !ok {
-		flag.Usage()
-		os.Exit(1)
+		return nil, errors.InvalidArgumentError(
+			"Usage: -f [b|brighten|g|grayscale|i|invert]")
 	}
-
-	// TODO: refactor into parseOutArg
-	if *flagOut == "" {
-		writer = os.Stdout
-	} else {
-		file, err := os.Create(*flagOut)
-		if err != nil {
-			flag.Usage()
-			panic(err)
-		}
-		defer file.Close()
-		writer = bufio.NewWriter(file)
-	}
-
-	modify(writer, img, f)
+	return f, nil
 }
 
 // Return a copy of the image modified by the input filter
