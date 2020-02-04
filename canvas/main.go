@@ -2,6 +2,7 @@ package main
 
 import (
 	"image"
+	"io"
 	"os"
 
 	// Package image/jpeg is not used explicitly in the code below,
@@ -16,44 +17,56 @@ import (
 	_ "image/jpeg"
 )
 
-type Changeable interface {
-	Set(x, y int, c color.Color)
+func main() {
+	// TODO: add flag functionality
+	img := decodeJPEG("resources/Arches.jpg")
+	reverse(os.Stdout, img)
 }
 
-func main() {
-	// Decode the JPEG data.
-	reader, err := os.Open("resources/Arches.jpg")
-	if err != nil {
-		panic(err.Error())
+func grayscale(writer io.Writer, m image.Image) {
+	// TODO: implement
+}
+
+func invertColor(c color.Color) color.Color {
+	r, g, b, a := c.RGBA()
+
+	cc := color.RGBA64{
+		R: 255 - uint16(r),
+		G: 255 - uint16(g),
+		B: 255 - uint16(b),
+		A: uint16(a),
 	}
-	defer reader.Close()
 
-	m, _, err := image.Decode(reader)
+	return cc
+}
 
-	if err != nil {
-		panic(err.Error())
-	}
-
+func reverse(writer io.Writer, m image.Image) {
 	bounds := m.Bounds()
 	img := image.NewRGBA(bounds)
 
-	// An image's bounds do not necessarily start at (0, 0), so the two loops start
-	// at bounds.Min.Y and bounds.Min.X. Looping over Y first and X second is more
-	// likely to result in better memory access patterns than X first and Y second.
 	for y := bounds.Min.Y; y < bounds.Max.Y; y++ {
 		for x := bounds.Min.X; x < bounds.Max.X; x++ {
-			r, g, b, a := m.At(x, y).RGBA()
-			var ur uint16 = 255 - uint16(r)
-			var ug uint16 = 255 - uint16(g)
-			var ub uint16 = 255 - uint16(b)
-			c := color.RGBA64{ur, ug, ub, uint16(a)}
+			c := m.At(x, y)
 
-			img.Set(x, y, c)
+			// Invert each color value
+			img.Set(x, y, invertColor(c))
 		}
 	}
-
 	var opt jpeg.Options
 
 	opt.Quality = 100
-	jpeg.Encode(os.Stdout, img, &opt)
+	jpeg.Encode(writer, img, &opt)
+}
+
+func decodeJPEG(f string) image.Image {
+	r, err := os.Open(f)
+	if err != nil {
+		panic(err)
+	}
+	defer r.Close()
+	m, _, err := image.Decode(r)
+	if err != nil {
+		panic(err)
+	}
+	return m
 }
