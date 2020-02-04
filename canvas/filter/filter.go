@@ -27,6 +27,7 @@ func Grayscale(c color.Color) color.Color {
 
 // Return a copy of the color inverted
 func Invert(c color.Color) color.Color {
+	// FIXME: safe colors
 	r, g, b, a := c.RGBA()
 	cc := color.RGBA64{
 		R: 255 - uint16(r),

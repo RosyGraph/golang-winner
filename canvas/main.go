@@ -6,6 +6,7 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"image"
 	"io"
 	"os"
@@ -20,20 +21,24 @@ import (
 	"github.com/RosyGraph/canvas/filter"
 )
 
-var filterArg = flag.String(
-	"f",
-	"",
-	"filter options: [b]righten, [g]rayscale, [i]nvert",
-)
-
 func main() {
 	// TODO: add gif/png functionality
-	img := decodeJPEG("resources/Arches.jpg")
+	var (
+		flagIn     = flag.String("in", "", "Input filename")
+		flagFilter = flag.String("f", "", "Filter name")
+		img        image.Image
+		err        error
+	)
+	flag.Parse()
+
+	img, err = decodeJPEG(*flagIn)
+	if err != nil {
+		fmt.Println("Invalid filename")
+	}
 
 	brighten := func(c color.Color) color.Color {
 		return filter.Brighten(c, 2)
 	}
-
 	filters := map[string]filter.Filter{
 		"brighten":  brighten,
 		"b":         brighten,
@@ -43,11 +48,7 @@ func main() {
 		"i":         filter.Invert,
 	}
 
-	flag.Parse()
-
-	var f filter.Filter
-
-	f, ok := filters[*filterArg]
+	f, ok := filters[*flagFilter]
 	if !ok {
 		flag.Usage()
 		os.Exit(1)
@@ -76,15 +77,15 @@ func modify(writer io.Writer, m image.Image, f filter.Filter) {
 }
 
 // Returns a JPEG as an Image
-func decodeJPEG(f string) image.Image {
+func decodeJPEG(f string) (image.Image, error) {
 	r, err := os.Open(f)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 	defer r.Close()
 	m, _, err := image.Decode(r)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
-	return m
+	return m, nil
 }
