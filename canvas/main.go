@@ -12,21 +12,20 @@ import (
 	// _ "image/gif"
 	// _ "image/png"
 
-	"image/color"
 	"image/jpeg"
 	_ "image/jpeg"
-)
 
-type filter func(c color.Color) color.Color
+	"github.com/RosyGraph/canvas/filter"
+)
 
 func main() {
 	// TODO: add flag functionality
+	// TODO: add gif/png functionality
 	img := decodeJPEG("resources/Arches.jpg")
-	// reverse(os.Stdout, img)
-	modifyAll(os.Stdout, img, grayscale)
+	modifyAll(os.Stdout, img, filter.Brighten)
 }
 
-func modifyAll(writer io.Writer, m image.Image, f filter) {
+func modifyAll(writer io.Writer, m image.Image, f filter.Filter) {
 	bounds := m.Bounds()
 	img := image.NewRGBA(bounds)
 
@@ -39,43 +38,8 @@ func modifyAll(writer io.Writer, m image.Image, f filter) {
 		}
 	}
 	var opt jpeg.Options
-
 	opt.Quality = 100
-	jpeg.Encode(writer, img, &opt)
-}
 
-func grayscale(c color.Color) color.Color {
-	return color.Gray16Model.Convert(c)
-}
-
-func invert(c color.Color) color.Color {
-	r, g, b, a := c.RGBA()
-
-	cc := color.RGBA64{
-		R: 255 - uint16(r),
-		G: 255 - uint16(g),
-		B: 255 - uint16(b),
-		A: uint16(a),
-	}
-
-	return cc
-}
-
-func reverse(writer io.Writer, m image.Image) {
-	bounds := m.Bounds()
-	img := image.NewRGBA(bounds)
-
-	for y := bounds.Min.Y; y < bounds.Max.Y; y++ {
-		for x := bounds.Min.X; x < bounds.Max.X; x++ {
-			c := m.At(x, y)
-
-			// Invert each color value
-			img.Set(x, y, invert(c))
-		}
-	}
-	var opt jpeg.Options
-
-	opt.Quality = 100
 	jpeg.Encode(writer, img, &opt)
 }
 
