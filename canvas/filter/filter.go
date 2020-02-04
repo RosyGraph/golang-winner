@@ -4,8 +4,10 @@ import (
 	"image/color"
 )
 
+// TODO
 type Filter func(c color.Color) color.Color
 
+// TODO
 func Brighten(c color.Color, f uint32) color.Color {
 	r, g, b, a := c.RGBA()
 	cc := color.RGBA64{
@@ -17,10 +19,12 @@ func Brighten(c color.Color, f uint32) color.Color {
 	return cc
 }
 
+// TODO
 func Grayscale(c color.Color) color.Color {
 	return color.Gray16Model.Convert(c)
 }
 
+// TODO
 func Invert(c color.Color) color.Color {
 	r, g, b, a := c.RGBA()
 	cc := color.RGBA64{
@@ -32,6 +36,7 @@ func Invert(c color.Color) color.Color {
 	return cc
 }
 
+// TODO
 func safe(n uint32) uint16 {
 	switch {
 	case n > 65535:

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"image"
 	"io"
 	"os"
@@ -15,18 +16,45 @@ import (
 	"github.com/RosyGraph/canvas/filter"
 )
 
-func main() {
-	// TODO: add flag functionality
-	// TODO: add gif/png functionality
+var farg = flag.String(
+	"filter",
+	"",
+	"filter options: [b]righten, [g]rayscale, [i]nvert",
+)
 
+// TODO: comment
+func main() {
+	// TODO: add gif/png functionality
 	img := decodeJPEG("resources/Arches.jpg")
+
 	brighten := func(c color.Color) color.Color {
 		return filter.Brighten(c, 2)
 	}
-	modifyAll(os.Stdout, img, brighten)
+
+	filters := map[string]filter.Filter{
+		"brighten":  brighten,
+		"b":         brighten,
+		"grayscale": filter.Grayscale,
+		"g":         filter.Grayscale,
+		"invert":    filter.Invert,
+		"i":         filter.Invert,
+	}
+
+	flag.Parse()
+
+	var f filter.Filter
+
+	f, ok := filters[*farg]
+	if !ok {
+		flag.Usage()
+		os.Exit(1)
+	}
+
+	modify(os.Stdout, img, f)
 }
 
-func modifyAll(writer io.Writer, m image.Image, f filter.Filter) {
+// TODO: comment
+func modify(writer io.Writer, m image.Image, f filter.Filter) {
 	bounds := m.Bounds()
 	img := image.NewRGBA(bounds)
 
@@ -44,6 +72,7 @@ func modifyAll(writer io.Writer, m image.Image, f filter.Filter) {
 	jpeg.Encode(writer, img, &opt)
 }
 
+// TODO: comment
 func decodeJPEG(f string) image.Image {
 	r, err := os.Open(f)
 	if err != nil {
