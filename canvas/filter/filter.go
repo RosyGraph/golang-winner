@@ -6,12 +6,12 @@ import (
 
 type Filter func(c color.Color) color.Color
 
-func Brighten(c color.Color) color.Color {
+func Brighten(c color.Color, f uint32) color.Color {
 	r, g, b, a := c.RGBA()
 	cc := color.RGBA64{
-		R: safe(r * 2),
-		G: safe(g * 2),
-		B: safe(b * 2),
+		R: safe(r * f),
+		G: safe(g * f),
+		B: safe(b * f),
 		A: uint16(a),
 	}
 	return cc

@@ -12,6 +12,7 @@ import (
 	// _ "image/gif"
 	// _ "image/png"
 
+	"image/color"
 	"image/jpeg"
 	_ "image/jpeg"
 
@@ -22,7 +23,10 @@ func main() {
 	// TODO: add flag functionality
 	// TODO: add gif/png functionality
 	img := decodeJPEG("resources/Arches.jpg")
-	modifyAll(os.Stdout, img, filter.Brighten)
+	brighten := func(c color.Color) color.Color {
+		return filter.Brighten(c, 2)
+	}
+	modifyAll(os.Stdout, img, brighten)
 }
 
 func modifyAll(writer io.Writer, m image.Image, f filter.Filter) {
