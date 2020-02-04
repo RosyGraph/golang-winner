@@ -17,14 +17,16 @@ import (
 	_ "image/jpeg"
 )
 
+type filter func(c color.Color) color.Color
+
 func main() {
 	// TODO: add flag functionality
 	img := decodeJPEG("resources/Arches.jpg")
 	// reverse(os.Stdout, img)
-	grayscale(os.Stdout, img)
+	modifyAll(os.Stdout, img, grayscale)
 }
 
-func grayscale(writer io.Writer, m image.Image) {
+func modifyAll(writer io.Writer, m image.Image, f filter) {
 	bounds := m.Bounds()
 	img := image.NewRGBA(bounds)
 
@@ -32,8 +34,8 @@ func grayscale(writer io.Writer, m image.Image) {
 		for x := bounds.Min.X; x < bounds.Max.X; x++ {
 			c := m.At(x, y)
 
-			gray := color.Gray16Model.Convert(c)
-			img.Set(x, y, gray)
+			cc := f(c)
+			img.Set(x, y, cc)
 		}
 	}
 	var opt jpeg.Options
@@ -42,7 +44,11 @@ func grayscale(writer io.Writer, m image.Image) {
 	jpeg.Encode(writer, img, &opt)
 }
 
-func invertColor(c color.Color) color.Color {
+func grayscale(c color.Color) color.Color {
+	return color.Gray16Model.Convert(c)
+}
+
+func invert(c color.Color) color.Color {
 	r, g, b, a := c.RGBA()
 
 	cc := color.RGBA64{
@@ -64,7 +70,7 @@ func reverse(writer io.Writer, m image.Image) {
 			c := m.At(x, y)
 
 			// Invert each color value
-			img.Set(x, y, invertColor(c))
+			img.Set(x, y, invert(c))
 		}
 	}
 	var opt jpeg.Options
