@@ -1,11 +1,8 @@
 package main
 
 import (
-	"encoding/base64"
-	"fmt"
 	"image"
-	"log"
-	"strings"
+	"os"
 
 	// Package image/jpeg is not used explicitly in the code below,
 	// but is imported for its initialization side-effect, which allows
@@ -13,45 +10,50 @@ import (
 	// two lines to also understand GIF and PNG images:
 	// _ "image/gif"
 	// _ "image/png"
+
+	"image/color"
+	"image/jpeg"
 	_ "image/jpeg"
 )
 
-func main() {
-	// Decode the JPEG data. If reading from file, create a reader with
-	//
-	// reader, err := os.Open("testdata/video-001.q50.420.jpeg")
-	// if err != nil {
-	//     log.Fatal(err)
-	// }
-	// defer reader.Close()
-	reader := base64.NewDecoder(base64.StdEncoding, strings.NewReader(data))
-	m, _, err := image.Decode(reader)
-	if err != nil {
-		log.Fatal(err)
-	}
-	bounds := m.Bounds()
+type Changeable interface {
+	Set(x, y int, c color.Color)
+}
 
-	// Calculate a 16-bin histogram for m's red, green, blue and alpha components.
-	//
+func main() {
+	// Decode the JPEG data.
+	reader, err := os.Open("resources/Arches.jpg")
+	if err != nil {
+		panic(err.Error())
+	}
+	defer reader.Close()
+
+	m, _, err := image.Decode(reader)
+
+	if err != nil {
+		panic(err.Error())
+	}
+
+	bounds := m.Bounds()
+	img := image.NewRGBA(bounds)
+
 	// An image's bounds do not necessarily start at (0, 0), so the two loops start
 	// at bounds.Min.Y and bounds.Min.X. Looping over Y first and X second is more
 	// likely to result in better memory access patterns than X first and Y second.
-	var histogram [16][4]int
 	for y := bounds.Min.Y; y < bounds.Max.Y; y++ {
 		for x := bounds.Min.X; x < bounds.Max.X; x++ {
 			r, g, b, a := m.At(x, y).RGBA()
-			// A color's RGBA method returns values in the range [0, 65535].
-			// Shifting by 12 reduces this to the range [0, 15].
-			histogram[r>>12][0]++
-			histogram[g>>12][1]++
-			histogram[b>>12][2]++
-			histogram[a>>12][3]++
+			var ur uint16 = 255 - uint16(r)
+			var ug uint16 = 255 - uint16(g)
+			var ub uint16 = 255 - uint16(b)
+			c := color.RGBA64{ur, ug, ub, uint16(a)}
+
+			img.Set(x, y, c)
 		}
 	}
 
-	// Print the results.
-	fmt.Printf("%-14s %6s %6s %6s %6s\n", "bin", "red", "green", "blue", "alpha")
-	for i, x := range histogram {
-		fmt.Printf("0x%04x-0x%04x: %6d %6d %6d %6d\n", i<<12, (i+1)<<12-1, x[0], x[1], x[2], x[3])
-	}
+	var opt jpeg.Options
+
+	opt.Quality = 100
+	jpeg.Encode(os.Stdout, img, &opt)
 }
