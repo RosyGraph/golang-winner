@@ -11,12 +11,8 @@ import (
 	"io"
 	"os"
 
-	// _ "image/gif"
-	// _ "image/png"
-
 	"image/color"
 	"image/jpeg"
-	_ "image/jpeg"
 
 	"github.com/RosyGraph/canvas/filter"
 	"golang.org/x/crypto/openpgp/errors"
@@ -33,7 +29,7 @@ func main() {
 		err        error
 	)
 	flag.Parse()
-	if m, err = decodeJPEG(*flagIn); err != nil {
+	if m, err = decodeIMG(*flagIn); err != nil {
 		panic(err)
 	}
 	if f, err = parseFilterArg(*flagFilter); err != nil {
@@ -99,8 +95,8 @@ func modify(writer io.Writer, m image.Image, f filter.Filter) {
 	jpeg.Encode(writer, img, &opt)
 }
 
-// Returns a JPEG as an Image.
-func decodeJPEG(f string) (image.Image, error) {
+// Returns a decoded image
+func decodeIMG(f string) (image.Image, error) {
 	// TODO: check file type and make the appropriate Image
 	r, err := os.Open(f)
 	if err != nil {
