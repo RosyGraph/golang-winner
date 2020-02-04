@@ -3,4 +3,4 @@
 web-scraping/
 javaredux/
 .gitignore
-resources/
+out/
