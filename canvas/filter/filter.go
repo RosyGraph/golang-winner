@@ -4,11 +4,12 @@ import (
 	"image/color"
 )
 
-// TODO
 type Filter func(c color.Color) color.Color
 
-// TODO
+// Return a copy of the color brigthened by a factor of f
 func Brighten(c color.Color, f uint32) color.Color {
+	// NOTE: Brighten does not implement Filter and must be
+	// wrapped to use modify() in the main function
 	r, g, b, a := c.RGBA()
 	cc := color.RGBA64{
 		R: safe(r * f),
@@ -19,12 +20,12 @@ func Brighten(c color.Color, f uint32) color.Color {
 	return cc
 }
 
-// TODO
+// Return a copy of the color converted to 16bit grayscale
 func Grayscale(c color.Color) color.Color {
 	return color.Gray16Model.Convert(c)
 }
 
-// TODO
+// Return a copy of the color inverted
 func Invert(c color.Color) color.Color {
 	r, g, b, a := c.RGBA()
 	cc := color.RGBA64{
@@ -36,7 +37,8 @@ func Invert(c color.Color) color.Color {
 	return cc
 }
 
-// TODO
+// Convert a potentially unsafe uint32 color value into a
+// safe uint16 color value
 func safe(n uint32) uint16 {
 	switch {
 	case n > 65535:

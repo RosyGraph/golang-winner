@@ -1,3 +1,7 @@
+// canvas processes images with different filters.
+// usage:
+// 		canvas ``input file'' -f ``filter'' ``output file''
+// 		available filters: -[b]righten, -[g]rayscale, -[i]nvert
 package main
 
 import (
@@ -16,13 +20,12 @@ import (
 	"github.com/RosyGraph/canvas/filter"
 )
 
-var farg = flag.String(
-	"filter",
+var filterArg = flag.String(
+	"f",
 	"",
 	"filter options: [b]righten, [g]rayscale, [i]nvert",
 )
 
-// TODO: comment
 func main() {
 	// TODO: add gif/png functionality
 	img := decodeJPEG("resources/Arches.jpg")
@@ -44,7 +47,7 @@ func main() {
 
 	var f filter.Filter
 
-	f, ok := filters[*farg]
+	f, ok := filters[*filterArg]
 	if !ok {
 		flag.Usage()
 		os.Exit(1)
@@ -53,7 +56,7 @@ func main() {
 	modify(os.Stdout, img, f)
 }
 
-// TODO: comment
+// Return a copy of the image modified by the input filter
 func modify(writer io.Writer, m image.Image, f filter.Filter) {
 	bounds := m.Bounds()
 	img := image.NewRGBA(bounds)
@@ -72,7 +75,7 @@ func modify(writer io.Writer, m image.Image, f filter.Filter) {
 	jpeg.Encode(writer, img, &opt)
 }
 
-// TODO: comment
+// Returns a JPEG as an Image
 func decodeJPEG(f string) image.Image {
 	r, err := os.Open(f)
 	if err != nil {
