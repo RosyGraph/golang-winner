@@ -1,4 +1,4 @@
-package main
+package sequence
 
 import "testing"
 
@@ -25,5 +25,16 @@ func TestNthArithmetic(t *testing.T) {
 					c.n, c.n1, c.d, got, c.want)
 			}
 		})
+	}
+}
+
+// 2, 4
+func TestNthGeometric(t *testing.T) {
+	got := NthGeometric(2, 2, 2)
+	want := 4
+
+	if got != want {
+		t.Errorf("NthGeometric(%d, %d, %d) got %d want %d",
+			2, 2, 2, got, want)
 	}
 }
