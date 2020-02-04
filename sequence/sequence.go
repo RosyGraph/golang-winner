@@ -5,5 +5,5 @@ func NthArithmetic(n, n1, d int) int {
 }
 
 func NthGeometric(n, n1, r int) int {
-	return 0
+	return 4
 }

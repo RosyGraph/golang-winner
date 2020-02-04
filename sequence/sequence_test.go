@@ -30,11 +30,28 @@ func TestNthArithmetic(t *testing.T) {
 
 // 2, 4
 func TestNthGeometric(t *testing.T) {
+	tc := []struct {
+		n    int
+		n1   int
+		r    int
+		want int
+	}{
+		{n: 2, n1: 2, r: 2, want: 4},
+	}
+
+	for _, c := range tc {
+		t.Run("NthGeometric", func(t *testing.T) {
+			got := NthGeometric(c.n, c.n1, c.r)
+
+			if got != c.want {
+				t.Errorf("NthGeometric(%d, %d, %d) got %d want %d",
+					c.n, c.n1, c.r, got, c.want)
+			}
+		})
+	}
 	got := NthGeometric(2, 2, 2)
 	want := 4
 
 	if got != want {
-		t.Errorf("NthGeometric(%d, %d, %d) got %d want %d",
-			2, 2, 2, got, want)
 	}
 }
