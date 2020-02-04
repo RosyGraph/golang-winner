@@ -5,6 +5,7 @@
 package main
 
 import (
+	"bufio"
 	"flag"
 	"fmt"
 	"image"
@@ -26,9 +27,12 @@ func main() {
 	var (
 		flagIn     = flag.String("in", "", "Input filename")
 		flagFilter = flag.String("f", "", "Filter name")
+		flagOut    = flag.String("out", "", "Output filename")
 		img        image.Image
 		err        error
+		writer     io.Writer
 	)
+
 	flag.Parse()
 
 	img, err = decodeJPEG(*flagIn)
@@ -36,6 +40,7 @@ func main() {
 		fmt.Println("Invalid filename")
 	}
 
+	// TODO: refactor into parseFilterArg
 	brighten := func(c color.Color) color.Color {
 		return filter.Brighten(c, 2)
 	}
@@ -54,7 +59,20 @@ func main() {
 		os.Exit(1)
 	}
 
-	modify(os.Stdout, img, f)
+	// TODO: refactor into parseOutArg
+	if *flagOut == "" {
+		writer = os.Stdout
+	} else {
+		file, err := os.Create(*flagOut)
+		if err != nil {
+			flag.Usage()
+			panic(err)
+		}
+		defer file.Close()
+		writer = bufio.NewWriter(file)
+	}
+
+	modify(writer, img, f)
 }
 
 // Return a copy of the image modified by the input filter
