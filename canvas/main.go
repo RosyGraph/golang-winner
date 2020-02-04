@@ -5,10 +5,6 @@ import (
 	"io"
 	"os"
 
-	// Package image/jpeg is not used explicitly in the code below,
-	// but is imported for its initialization side-effect, which allows
-	// image.Decode to understand JPEG formatted images. Uncomment these
-	// two lines to also understand GIF and PNG images:
 	// _ "image/gif"
 	// _ "image/png"
 
@@ -22,6 +18,7 @@ import (
 func main() {
 	// TODO: add flag functionality
 	// TODO: add gif/png functionality
+
 	img := decodeJPEG("resources/Arches.jpg")
 	brighten := func(c color.Color) color.Color {
 		return filter.Brighten(c, 2)
