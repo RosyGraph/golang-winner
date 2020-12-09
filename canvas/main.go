@@ -19,6 +19,9 @@ import (
 )
 
 func main() {
+	// TODO: if there is no output argument, use the remaining args for file
+	// output
+	// TODO: use first arg as file input
 	var (
 		flagIn     = flag.String("in", "", "Input filename")
 		flagFilter = flag.String("f", "", "Filter name")

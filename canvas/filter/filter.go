@@ -30,9 +30,9 @@ func Invert(c color.Color) color.Color {
 	// FIXME: safe colors
 	r, g, b, a := c.RGBA()
 	cc := color.RGBA64{
-		R: 255 - uint16(r),
-		G: 255 - uint16(g),
-		B: 255 - uint16(b),
+		R: uint16(65535 - r),
+		G: uint16(65535 - g),
+		B: uint16(65535 - b),
 		A: uint16(a),
 	}
 	return cc

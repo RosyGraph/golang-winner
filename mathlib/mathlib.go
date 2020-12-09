@@ -5,6 +5,21 @@ import (
 	"math"
 )
 
+func Intex() string {
+	var d = `\draw[dashed]`
+	f := func(x int) int {
+		return x * x
+	}
+	var plot string
+	for x := 0; x < 3; x++ {
+		plot += fmt.Sprintf("%s (%d,%d) -- (%d,%d) -- (%d,%d);\n",
+			d, x, 0, x, f(x+1), x+1, f(x+1))
+	}
+	plot += fmt.Sprintf("%s (%d,%d) -- (%d,%d);\n", d, 3, 0, 3, f(3))
+
+	return plot
+}
+
 const pi float64 = math.Pi
 
 func heron(a, b, c float64) float64 {

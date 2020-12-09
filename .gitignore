@@ -5,3 +5,5 @@ javaredux/
 .gitignore
 out/
 canvas/
+sorgsh/
+dat/
