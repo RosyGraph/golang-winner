@@ -3,6 +3,7 @@
 web-scraping/
 javaredux/
 .gitignore
+go.mod
 out/
 canvas/
 sorgsh/
