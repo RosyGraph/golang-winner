@@ -14,34 +14,36 @@ func TestHelloWorld(t *testing.T) {
 		queries []string
 		want    []int32
 	}{
-		{name: "push one", queries: []string{"1 1"}, want: []int32{}},
-		{name: "push two", queries: []string{"1 2"}, want: []int32{}},
-		{name: "push 100", queries: []string{"1 100"}, want: []int32{}},
-		{
-			name:    "push and pop 1",
-			queries: []string{"1 1", "3"},
-			want:    []int32{1},
-		},
-		{
-			name:    "push and get 100",
-			queries: []string{"1 100", "3"},
-			want:    []int32{100},
-		},
-		{
-			name:    "push two ints get one",
-			queries: []string{"1 100", "1 2", "3"},
-			want:    []int32{100},
-		},
-		{
-			name:    "push two ints, pop one, get one",
-			queries: []string{"1 100", "1 2", "2", "3"},
-			want:    []int32{100},
-		},
-		{
-			name:    "push two ints, get one",
-			queries: []string{"1 100", "1 2", "3"},
-			want:    []int32{100},
-		},
+		/*
+		 * {name: "push one", queries: []string{"1 1"}, want: []int32{}},
+		 * {name: "push two", queries: []string{"1 2"}, want: []int32{}},
+		 * {name: "push 100", queries: []string{"1 100"}, want: []int32{}},
+		 * {
+		 *     name:    "push and pop 1",
+		 *     queries: []string{"1 1", "3"},
+		 *     want:    []int32{1},
+		 * },
+		 * {
+		 *     name:    "push and get 100",
+		 *     queries: []string{"1 100", "3"},
+		 *     want:    []int32{100},
+		 * },
+		 * {
+		 *     name:    "push two ints get one",
+		 *     queries: []string{"1 100", "1 2", "3"},
+		 *     want:    []int32{100},
+		 * },
+		 * {
+		 *     name:    "push two ints, pop one, get one",
+		 *     queries: []string{"1 100", "1 2", "2", "3"},
+		 *     want:    []int32{100},
+		 * },
+		 * {
+		 *     name:    "push two ints, get one",
+		 *     queries: []string{"1 100", "1 2", "3"},
+		 *     want:    []int32{100},
+		 * },
+		 */
 		{
 			name:    "push two, pop max, get one",
 			queries: []string{"1 100", "1 102", "2", "3"},
